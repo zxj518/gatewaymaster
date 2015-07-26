@@ -4,6 +4,13 @@ android {
     compileSdkVersion 21
     buildToolsVersion "22.0.1"
 
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+
     defaultConfig {
         applicationId "com.aoppp.gatewaymaster"
         minSdkVersion 15
@@ -32,4 +39,6 @@ dependencies {
     compile files('libs/SocialSDK_laiwang_1.jar')
     compile files('libs/SocialSDK_laiwang_2.jar')
     compile files('libs/SocialSDK_QQZone_1.jar')
+
+    compile project(':gatewaysdk')
 }
