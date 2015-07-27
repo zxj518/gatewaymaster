@@ -127,31 +127,10 @@ public class PageManager {
         Map<String, String> result = gson.fromJson(json, mapType);
         return result;
     }
-
+    public void clearCache(){
+        cache.clear();
+    }
     private Page getPageMeta(Activity activity, WebViewJs webViewJs, String deviceType, String indicatorId) {
-//        PageMeta onePage = new PageMeta();
-//        onePage.setActivity(activity);
-//        onePage.setUrl("http://192.168.1.102/html/status/waninfo.asp?ipv4");
-//        onePage.setWebViewJs(webViewJs);
-//        List<ElementMeta> elementMetaList = new ArrayList<>();
-//        ElementMeta oneElement = new ElementMeta();
-//        oneElement.setIndicator("record_0");
-//        oneElement.setXpath("//*[@id=\"record_0\"]/td[2]");
-////        oneElement.setJs("document.evaluate(\n" +
-////                "     '//*[@id=\"record_0\"]/td[2]',\n" +
-////                "     document,\n" +
-////                "     null,\n" +
-////                "     XPathResult.FIRST_ORDERED_NODE_TYPE,\n" +
-////                "     null).singleNodeValue.innerText;");
-//        elementMetaList.add(oneElement);
-////        ElementMeta twoElement = new ElementMeta();
-////        twoElement.setJs("document.getElementsByTagName('td')[0].height");
-////        twoElement.setId("td_height");
-////        elementMetaList.add(twoElement);
-//        onePage.setAllElements(elementMetaList);
-//        return onePage;
-
-
         Page page = pageMetaByIndicator.get(deviceType).get(indicatorId);
         if (page != null) {
             page.setActivity(activity);

@@ -79,7 +79,9 @@ public class FiberGateway extends Gateway {
     public boolean logout() {
         try {
             HttpGet request = new HttpGet("http://" + deviceProfile.getIp() + "/ctlogout.cmd");
-            request.addHeader("Cookie", sessionCookie.getValue());
+            if(sessionCookie != null) {
+                request.addHeader("Cookie", sessionCookie.getValue());
+            }
             HttpResponse res = client.execute(request);
             return true;
         } catch (IOException e) {

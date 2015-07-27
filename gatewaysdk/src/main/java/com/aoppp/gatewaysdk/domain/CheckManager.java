@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-//import com.aoppp.gatewaysdk.Messageable;
 import com.aoppp.gatewaysdk.MessageConst;
 import com.aoppp.webviewdom.internal.WebViewJs;
 import com.google.common.collect.Lists;
@@ -46,50 +45,6 @@ public class CheckManager {
     }
 
 
-    public CheckManager() {
-
- //       gateway = selectGateway();
-
-//        CheckItem _1_TR069_R_VID_45_CONNECT_STATE = new CheckItem();
-//        _1_TR069_R_VID_45_CONNECT_STATE.setName("1_TR069_R_VID_45 链接状态");
-//        Indicator indicator = new Indicator();
-//        indicator.setName("1_TR069_R_VID_45 链接状态");
-//        indicator.setDefaultValue("断开");
-//        indicator.setUrl("http://%s/getpage.gch?pid=1002&nextpage=status_ethwan_if_t.gch");
-//        indicator.setPattern("<table id=\"TestContent2\"[\\s\\S]*<td class=\"tdleft_1\">连接状态</td>\n<td class=\"tdright\">(.*)</td>");
-//        _1_TR069_R_VID_45_CONNECT_STATE.setIndicators(Lists.newArrayList(indicator));
-//        this.checkItemList.add(_1_TR069_R_VID_45_CONNECT_STATE);
-//
-//
-//        CheckItem physicsVesion = new CheckItem();
-//        physicsVesion.setName("硬件版本");
-//        Indicator physicsVesionIndicator = new Indicator();
-//        physicsVesionIndicator.setName("硬件版本");
-//        physicsVesionIndicator.setDefaultValue("V5.0");
-//        physicsVesionIndicator.setUrl("http://%1$s/template.gch?pid=1002&nextpage=status_dev_info_t.gch");
-//        physicsVesionIndicator.setPattern("<td class=\"tdleft\">硬件版本号</td>\n" +
-//                "<td id=\"Frm_HardwareVer\" name=\"Frm_HardwareVer\" class=\"tdright\">(.*)</td>");
-//        physicsVesion.setIndicators(Lists.newArrayList(physicsVesionIndicator));
-//        this.checkItemList.add(physicsVesion);
-//
-//
-//        CheckItem softVersion = new CheckItem();
-//        softVersion.setName("软件版本");
-//        Indicator softVersionIndicator = new Indicator();
-//        softVersionIndicator.setName("软件版本");
-//        softVersionIndicator.setDefaultValue("F412_IMS_V5.0.0P1T1_JS1309");
-//        softVersionIndicator.setUrl("http://%1$s/template.gch?pid=1002&nextpage=status_dev_info_t.gch");
-//        softVersionIndicator.setPattern("<td class=\"tdleft\">软件版本号</td>\n" +
-//                "<td id=\"Frm_SoftwareVer\" name=\"Frm_SoftwareVer\" class=\"tdright\">(.*)</td>");
-//        softVersion.setIndicators(Lists.newArrayList(softVersionIndicator));
-//        this.checkItemList.add(softVersion);
-//        this.checkConf = checkConf;
-    }
-
-//    private List<CheckItem> createDefaultCheckItems(){
-//
-//    }
-
     public void loadCheckConf(Context context){
        checkConf = RouterCheckConf.loadConf(context);
     }
@@ -100,8 +55,9 @@ public class CheckManager {
         lastResult = null;
     }
 
-    public void clear(){
+    public void clear(Activity activity){
         //TODO manage check thread
+        this.gateway.clearCache(activity);
         this.deviceProfile = null;
         this.gateway = null;
 
@@ -192,15 +148,5 @@ public class CheckManager {
         DeviceProfile profile = new DeviceProfile("fiber","telecomadmin", "telecomadmin73873188", "192.168.1.104");
         return profile;
     }
-
-
-//
-//    public static void main(String[] args) {
-//        //DeviceProfile profile = new DeviceProfile("telecomadmin", "telecomadmin12223015", "192.168.1.101");
-//        DeviceProfile profile = new DeviceProfile("telecomadmin", "telecomadmin63135359", "192.168.1.1");
-//        CheckResult result = CheckManager.instance().check(profile, CheckManager.instance().getAllCheckItems());
-//
-//        System.out.println(result);
-//    }
 
 }

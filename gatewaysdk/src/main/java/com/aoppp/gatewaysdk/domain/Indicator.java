@@ -21,9 +21,13 @@ public class Indicator implements Cloneable{
     String defaultValue;
 
 
+    String desc;
+
 
     public void check(){
-        if(defaultValue.equals(value)){
+        String trimed = value.toString().trim();
+        trimed = trimed.replaceAll("[\\s\\u00A0]+$", ""); //去掉 160 的空格// FIXME
+        if(defaultValue.equals(trimed)){
             this.setState(1);
         }else{
             this.setState(0);
@@ -81,6 +85,14 @@ public class Indicator implements Cloneable{
     }
 
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     public Indicator clone(){
         Indicator cp = new Indicator();
         cp.setState(this.state);
@@ -89,6 +101,7 @@ public class Indicator implements Cloneable{
         cp.setMessage(this.message);
         cp.setDataType(this.dataType);
         cp.setValue(this.value);
+        cp.setDesc(this.desc);
         return cp;
     }
 

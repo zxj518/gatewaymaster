@@ -51,6 +51,10 @@ public abstract class Gateway {
         return indicator;
     }
 
+    public void clearCache(Activity activity){
+        PageManager.getInstance(activity).clearCache();
+    }
+
 
     public static Gateway build(DeviceProfile deviceProfile){
         if(deviceProfile.getProvider().equals("zte")){
