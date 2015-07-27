@@ -10,6 +10,14 @@
     <dimen name="ldrawer_middleBarArrowSize">16dp</dimen>
     <dimen name="navigation_drawer_width">240dp</dimen>
 
+    <dimen name="common_btn_height">48dp</dimen>
+    <dimen name="common_btn_with">220dp</dimen>
+    <dimen name="signin_btn_margin_bottom">16dp</dimen>
+    <dimen name="username_text_margin_bottom">10dp</dimen>
+    <dimen name="password_text_margin_bottom">10dp</dimen>
+    <dimen name="login_text_size">14sp</dimen>
+    <dimen name="login_btn_text_size">17sp</dimen>
+
     <dimen name="text_sm">7.0sp</dimen>
     <dimen name="text_md">11.0sp</dimen>
     <dimen name="text_lg">17.0sp</dimen>

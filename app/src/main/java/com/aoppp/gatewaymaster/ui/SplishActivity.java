@@ -109,7 +109,7 @@ public class SplishActivity extends BaseActivity {
             }
 
             public void onAnimationEnd(Animation animation) {
-                startActivity(MainActivity.class);
+                startActivity(LoginActivity.class);
                 finish();
                 // mImageView.startAnimation(mFadeOut);
             }

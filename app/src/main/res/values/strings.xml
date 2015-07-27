@@ -2,11 +2,16 @@
     <string name="app_name">网关助手</string>
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
+    <string name="login_device_ip">网关IP</string>
+    <string name="login_device_admin">管理员</string>
+    <string name="login_device_pwd">密码</string>
+    <string name="login_btn_login">登录</string>
 
     <string name="app_memory_clean">内存加速</string>
     <string name="app_rublish_clean">垃圾清理</string>
     <string name="app_autostart_manage">自启管理</string>
     <string name="app_software_manage">软件管理</string>
+
 
     <string name="action_settings">Settings</string>
 
