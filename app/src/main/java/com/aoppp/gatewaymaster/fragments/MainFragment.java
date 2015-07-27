@@ -10,14 +10,9 @@ import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
-import com.aoppp.gatewaymaster.model.SDCardInfo;
-import com.aoppp.gatewaymaster.utils.AppUtil;
-import com.aoppp.gatewaymaster.utils.StorageUtil;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
 import com.umeng.update.UmengUpdateAgent;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,15 +24,16 @@ public class MainFragment extends BaseFragment {
     @InjectView(R.id.arc_store)
     ArcProgress arcStore;
 
-    @InjectView(R.id.arc_process)
-    ArcProgress arcProcess;
+//    @InjectView(R.id.arc_process)
+//    ArcProgress arcProcess;
+
     @InjectView(R.id.capacity)
     TextView capacity;
 
     Context mContext;
 
-    private Timer timer;
-    private Timer timer2;
+//    private Timer timer;
+//    private Timer timer2;
 
 
     @Override
@@ -68,79 +64,101 @@ public class MainFragment extends BaseFragment {
 
     private void fillData() {
         // TODO Auto-generated method stub
-        timer = null;
-        timer2 = null;
-        timer = new Timer();
-        timer2 = new Timer();
+//        timer = null;
+//        timer2 = null;
+//        timer = new Timer();
+//        timer2 = new Timer();
+//
+//
+//        long l = AppUtil.getAvailMemory(mContext);
+//        long y = AppUtil.getTotalMemory(mContext);
+//        final double x = (((y - l) / (double) y) * 100);
+//        //   arcProcess.setProgress((int) x);
+//
+//        arcProcess.setProgress(0);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//
+//                        if (arcProcess.getProgress() >= (int) x) {
+//                            timer.cancel();
+//                        } else {
+//                            arcProcess.setProgress(arcProcess.getProgress() + 1);
+//                        }
+//
+//                    }
+//                });
+//            }
+//        }, 50, 20);
+//
+//        SDCardInfo mSDCardInfo = StorageUtil.getSDCardInfo();
+//        SDCardInfo mSystemInfo = StorageUtil.getSystemSpaceInfo(mContext);
+//
+//        long nAvailaBlock;
+//        long TotalBlocks;
+//        if (mSDCardInfo != null) {
+//            nAvailaBlock = mSDCardInfo.free + mSystemInfo.free;
+//            TotalBlocks = mSDCardInfo.total + mSystemInfo.total;
+//        } else {
+//            nAvailaBlock = mSystemInfo.free;
+//            TotalBlocks = mSystemInfo.total;
+//        }
+//
+//        final double percentStore = (((TotalBlocks - nAvailaBlock) / (double) TotalBlocks) * 100);
 
-
-        long l = AppUtil.getAvailMemory(mContext);
-        long y = AppUtil.getTotalMemory(mContext);
-        final double x = (((y - l) / (double) y) * 100);
-        //   arcProcess.setProgress((int) x);
-
-        arcProcess.setProgress(0);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        if (arcProcess.getProgress() >= (int) x) {
-                            timer.cancel();
-                        } else {
-                            arcProcess.setProgress(arcProcess.getProgress() + 1);
-                        }
-
-                    }
-                });
-            }
-        }, 50, 20);
-
-        SDCardInfo mSDCardInfo = StorageUtil.getSDCardInfo();
-        SDCardInfo mSystemInfo = StorageUtil.getSystemSpaceInfo(mContext);
-
-        long nAvailaBlock;
-        long TotalBlocks;
-        if (mSDCardInfo != null) {
-            nAvailaBlock = mSDCardInfo.free + mSystemInfo.free;
-            TotalBlocks = mSDCardInfo.total + mSystemInfo.total;
-        } else {
-            nAvailaBlock = mSystemInfo.free;
-            TotalBlocks = mSystemInfo.total;
-        }
-
-        final double percentStore = (((TotalBlocks - nAvailaBlock) / (double) TotalBlocks) * 100);
-
-        capacity.setText(StorageUtil.convertStorage(TotalBlocks - nAvailaBlock) + "/" + StorageUtil.convertStorage(TotalBlocks));
+        capacity.setText("");
         arcStore.setProgress(0);
 
-        timer2.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        if (arcStore.getProgress() >= (int) percentStore) {
-                            timer2.cancel();
-                        } else {
-                            arcStore.setProgress(arcStore.getProgress() + 1);
-                        }
-
-                    }
-                });
-            }
-        }, 50, 20);
+//        timer2.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//
+//                        if (arcStore.getProgress() >= (int) percentStore) {
+//                            timer2.cancel();
+//                        } else {
+//                            arcStore.setProgress(arcStore.getProgress() + 1);
+//                        }
+//
+//                    }
+//                });
+//            }
+//        }, 50, 20);
 
 
     }
 
     @OnClick(R.id.card1)
     void speedUp() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(int i = 0;i< 100 ;i++){
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    final int process = i;
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            arcStore.setProgress(process);
+                        }
+                    });
+
+                }
+            }
+        }).start();
+
         //startActivity(MemoryCleanActivity.class);
     }
 
@@ -170,8 +188,8 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        timer.cancel();
-        timer2.cancel();
+//        timer.cancel();
+//        timer2.cancel();
         super.onDestroy();
     }
 }
