@@ -18,6 +18,8 @@ public class CheckItem implements Cloneable{
     // -1 unknow ,0 fail ,1 success
     int state = 1;
 
+    String desc;
+
     //检查项包含的指标
     List<Indicator> indicators ;
 
@@ -45,11 +47,20 @@ public class CheckItem implements Cloneable{
         this.indicators = indicators;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     public CheckItem clone(){
         CheckItem cp = new CheckItem();
         cp.setName(this.name);
         cp.setState(this.state);
         cp.setIndicators(this.indicators);
+        cp.setDesc(this.desc);
         return cp;
     }
 

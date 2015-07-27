@@ -1,6 +1,8 @@
 package com.aoppp.gatewaymaster.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
+import com.aoppp.gatewaymaster.ui.MainActivity;
+import com.aoppp.gatewaymaster.ui.MemoryCleanActivity;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
 import com.aoppp.gatewaysdk.MessageConst;
 import com.aoppp.gatewaysdk.domain.CheckManager;
@@ -116,7 +120,7 @@ public class MainFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    private void onCheckStart(){
+    private void onCheckStart() {
 
         RouterCheckConf conf = RouterCheckConf.loadConf(this.getActivity());
         capacity.setText("正在检测..");
@@ -128,65 +132,72 @@ public class MainFragment extends BaseFragment {
                 long timeBegin = System.currentTimeMillis();
                 try {
                     CheckManager.instance().willCheckDevice(profile);
-                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "正在登录",3);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "正在登录", 3);
                     CheckManager.instance().login();
-                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "开始执行检查..",5);
-                    final CheckResult result = CheckManager.instance().check(MainFragment.this.getActivity(),MainFragment.this.mHandler, webView);
-                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "完成检查..",90);
-                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销登录..",95);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "开始执行检查..", 5);
+                    final CheckResult result = CheckManager.instance().check(MainFragment.this.getActivity(), MainFragment.this.mHandler, webView);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "完成检查..", 90);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销登录..", 95);
                     CheckManager.instance().logout();
-                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销完成",98);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销完成", 98);
 
 
-                }catch (Exception ex){
-                    Log.e(MainFragment.this.getClass().getCanonicalName(),"ERROR",ex);
-//                    CheckResult result = CheckManager.getLastCheckResult();
-//                    long timeUsed = System.currentTimeMillis() - timeBegin;
-//                    if(result==null){
-//                        result = new CheckResult(-1, ex.getMessage(), CheckManager.instance().getAllCheckItems(), timeUsed);
-//                        CheckManager.setLastCheckResult(result);
-//                    }else{
-//                        result.setErrorCode(-1);
-//                        result.setErrorMessage(ex.getMessage());
-//                    }
-
-                }finally {
-
+                } catch (Exception ex) {
+                    Log.e(MainFragment.this.getClass().getCanonicalName(), "ERROR", ex);
+                    CheckResult result = CheckManager.getLastCheckResult();
+                    long timeUsed = System.currentTimeMillis() - timeBegin;
+                    if (result == null) {
+                        result = new CheckResult(-1, ex.getMessage(), CheckManager.instance().getAllCheckItems(), timeUsed);
+                        CheckManager.setLastCheckResult(result);
+                    } else {
+                        result.setErrorCode(-1);
+                        result.setErrorMessage(ex.getMessage());
+                    }
+                } finally {
                     CheckManager.instance().clear();
                 }
 
 
-                sendOutputMessage(MessageConst.CHECK_DONE, "",100);
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                        checkCompleted(CheckManager.getLastCheckResult());
-//                    }
-//                });
-                //handler.checkCompleted(new CheckResult(100, "OK", new ArrayList<CheckItem>()));
+                sendOutputMessage(MessageConst.CHECK_DONE, "", 100);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        checkCompleted(CheckManager.getLastCheckResult());
+                    }
+                });
             }
         }).start();
     }
 
-    public void sendOutputMessage(int code, String msgInfo,int process){
+    public void checkCompleted(CheckResult result) {
+
+        if (result.getErrorCode() < 0) {
+            AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle("Error").setMessage(result.getErrorMessage()).create();
+            dialog.show();
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra("result", result.getErrorCode());
+            intent.setClass(getActivity(), MemoryCleanActivity.class);
+            startActivityForResult(intent, 2);
+        }
+    }
+
+    public void sendOutputMessage(int code, String msgInfo, int process) {
         Message msg = new Message();
         //msg.set
         msg.what = code;
         Bundle bundle = new Bundle();
         bundle.putCharSequence("msg", msgInfo);
-        bundle.putInt("process",process);
+        bundle.putInt("process", process);
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
 
-    private Handler mHandler = new Handler()
-    {
-        public void handleMessage(Message msg)
-        {
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
             //更新UI
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case MessageConst.CHECK_DONE:
                     capacity.setText("检测完成");
                     arcStore.setProgress(100);
@@ -197,6 +208,8 @@ public class MainFragment extends BaseFragment {
                     break;
             }
             super.handleMessage(msg);
-        };
+        }
+
+        ;
     };
 }

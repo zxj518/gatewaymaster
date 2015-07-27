@@ -21,6 +21,8 @@ public class Indicator implements Cloneable{
     String defaultValue;
 
 
+    String desc;
+
 
     public void check(){
         if(defaultValue.equals(value)){
@@ -81,6 +83,14 @@ public class Indicator implements Cloneable{
     }
 
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     public Indicator clone(){
         Indicator cp = new Indicator();
         cp.setState(this.state);
@@ -89,6 +99,7 @@ public class Indicator implements Cloneable{
         cp.setMessage(this.message);
         cp.setDataType(this.dataType);
         cp.setValue(this.value);
+        cp.setDesc(this.desc);
         return cp;
     }
 
