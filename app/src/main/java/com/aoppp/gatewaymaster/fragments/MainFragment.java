@@ -154,7 +154,7 @@ public class MainFragment extends BaseFragment {
                         result.setErrorMessage(ex.getMessage());
                     }
                 } finally {
-                    CheckManager.instance().clear();
+                    CheckManager.instance().clear(getActivity());
                 }
 
 
