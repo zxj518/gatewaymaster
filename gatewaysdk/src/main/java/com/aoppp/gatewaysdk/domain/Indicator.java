@@ -25,7 +25,9 @@ public class Indicator implements Cloneable{
 
 
     public void check(){
-        if(defaultValue.equals(value)){
+        String trimed = value.toString().trim();
+        trimed = trimed.replaceAll("[\\s\\u00A0]+$", ""); //去掉 160 的空格// FIXME
+        if(defaultValue.equals(trimed)){
             this.setState(1);
         }else{
             this.setState(0);
