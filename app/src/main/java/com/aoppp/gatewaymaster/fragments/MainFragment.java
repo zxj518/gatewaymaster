@@ -2,7 +2,10 @@ package com.aoppp.gatewaymaster.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,12 @@ import android.widget.TextView;
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
+import com.aoppp.gatewaysdk.MessageConst;
+import com.aoppp.gatewaysdk.domain.CheckManager;
+import com.aoppp.gatewaysdk.domain.CheckResult;
+import com.aoppp.gatewaysdk.domain.DeviceProfile;
+import com.aoppp.gatewaysdk.domain.RouterCheckConf;
+import com.aoppp.webviewdom.internal.WebViewJs;
 import com.umeng.update.UmengUpdateAgent;
 
 
@@ -31,6 +40,8 @@ public class MainFragment extends BaseFragment {
     TextView capacity;
 
     Context mContext;
+    @InjectView(R.id.webView)
+    WebViewJs webView;
 
 //    private Timer timer;
 //    private Timer timer2;
@@ -44,6 +55,7 @@ public class MainFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
         mContext = getActivity();
+        CheckManager.instance().loadCheckConf(mContext);
 
         return view;
     }
@@ -63,102 +75,13 @@ public class MainFragment extends BaseFragment {
     }
 
     private void fillData() {
-        // TODO Auto-generated method stub
-//        timer = null;
-//        timer2 = null;
-//        timer = new Timer();
-//        timer2 = new Timer();
-//
-//
-//        long l = AppUtil.getAvailMemory(mContext);
-//        long y = AppUtil.getTotalMemory(mContext);
-//        final double x = (((y - l) / (double) y) * 100);
-//        //   arcProcess.setProgress((int) x);
-//
-//        arcProcess.setProgress(0);
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//
-//                        if (arcProcess.getProgress() >= (int) x) {
-//                            timer.cancel();
-//                        } else {
-//                            arcProcess.setProgress(arcProcess.getProgress() + 1);
-//                        }
-//
-//                    }
-//                });
-//            }
-//        }, 50, 20);
-//
-//        SDCardInfo mSDCardInfo = StorageUtil.getSDCardInfo();
-//        SDCardInfo mSystemInfo = StorageUtil.getSystemSpaceInfo(mContext);
-//
-//        long nAvailaBlock;
-//        long TotalBlocks;
-//        if (mSDCardInfo != null) {
-//            nAvailaBlock = mSDCardInfo.free + mSystemInfo.free;
-//            TotalBlocks = mSDCardInfo.total + mSystemInfo.total;
-//        } else {
-//            nAvailaBlock = mSystemInfo.free;
-//            TotalBlocks = mSystemInfo.total;
-//        }
-//
-//        final double percentStore = (((TotalBlocks - nAvailaBlock) / (double) TotalBlocks) * 100);
-
-        capacity.setText("");
         arcStore.setProgress(0);
-
-//        timer2.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//
-//                        if (arcStore.getProgress() >= (int) percentStore) {
-//                            timer2.cancel();
-//                        } else {
-//                            arcStore.setProgress(arcStore.getProgress() + 1);
-//                        }
-//
-//                    }
-//                });
-//            }
-//        }, 50, 20);
-
 
     }
 
     @OnClick(R.id.card1)
     void speedUp() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = 0;i< 100 ;i++){
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    final int process = i;
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            arcStore.setProgress(process);
-                        }
-                    });
-
-                }
-            }
-        }).start();
-
+        onCheckStart();
         //startActivity(MemoryCleanActivity.class);
     }
 
@@ -192,4 +115,88 @@ public class MainFragment extends BaseFragment {
 //        timer2.cancel();
         super.onDestroy();
     }
+
+    private void onCheckStart(){
+
+        RouterCheckConf conf = RouterCheckConf.loadConf(this.getActivity());
+        capacity.setText("正在检测..");
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final DeviceProfile profile = CheckManager.instance().getDefaultProfile();
+                long timeBegin = System.currentTimeMillis();
+                try {
+                    CheckManager.instance().willCheckDevice(profile);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "正在登录",3);
+                    CheckManager.instance().login();
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "开始执行检查..",5);
+                    final CheckResult result = CheckManager.instance().check(MainFragment.this.getActivity(),MainFragment.this.mHandler, webView);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "完成检查..",90);
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销登录..",95);
+                    CheckManager.instance().logout();
+                    sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销完成",98);
+
+
+                }catch (Exception ex){
+                    Log.e(MainFragment.this.getClass().getCanonicalName(),"ERROR",ex);
+//                    CheckResult result = CheckManager.getLastCheckResult();
+//                    long timeUsed = System.currentTimeMillis() - timeBegin;
+//                    if(result==null){
+//                        result = new CheckResult(-1, ex.getMessage(), CheckManager.instance().getAllCheckItems(), timeUsed);
+//                        CheckManager.setLastCheckResult(result);
+//                    }else{
+//                        result.setErrorCode(-1);
+//                        result.setErrorMessage(ex.getMessage());
+//                    }
+
+                }finally {
+
+                    CheckManager.instance().clear();
+                }
+
+
+                sendOutputMessage(MessageConst.CHECK_DONE, "",100);
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                        checkCompleted(CheckManager.getLastCheckResult());
+//                    }
+//                });
+                //handler.checkCompleted(new CheckResult(100, "OK", new ArrayList<CheckItem>()));
+            }
+        }).start();
+    }
+
+    public void sendOutputMessage(int code, String msgInfo,int process){
+        Message msg = new Message();
+        //msg.set
+        msg.what = code;
+        Bundle bundle = new Bundle();
+        bundle.putCharSequence("msg", msgInfo);
+        bundle.putInt("process",process);
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);
+    }
+
+    private Handler mHandler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            //更新UI
+            switch (msg.what)
+            {
+                case MessageConst.CHECK_DONE:
+                    capacity.setText("检测完成");
+                    arcStore.setProgress(100);
+                    break;
+                case MessageConst.CHECKING_OUTPUT:
+                    capacity.setText(msg.getData().getCharSequence("msg"));
+                    arcStore.setProgress(msg.getData().getInt("process"));
+                    break;
+            }
+            super.handleMessage(msg);
+        };
+    };
 }

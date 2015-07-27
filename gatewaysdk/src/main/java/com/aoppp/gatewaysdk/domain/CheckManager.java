@@ -1,8 +1,13 @@
 package com.aoppp.gatewaysdk.domain;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
-import com.aoppp.gatewaysdk.Messageable;
+//import com.aoppp.gatewaysdk.Messageable;
+import com.aoppp.gatewaysdk.MessageConst;
 import com.aoppp.webviewdom.internal.WebViewJs;
 import com.google.common.collect.Lists;
 
@@ -126,23 +131,33 @@ public class CheckManager {
 
     }
 
-    public CheckResult check(Messageable context, WebViewJs webViewJs) throws Exception{
+    public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs) throws Exception{
         if(gateway==null){
             throw new Exception("Please set device profile first.");
         }
-        return check(context,  webViewJs, checkConf.getCheckItems());
+        return check(context, handler, webViewJs, checkConf.getCheckItems());
     }
 
-    public CheckResult check(Messageable context,WebViewJs webViewJs , CheckItem[] checkItems){
+    public CheckResult check(Activity context,Handler handler,WebViewJs webViewJs , CheckItem[] checkItems){
 
         List<CheckItem> result = Lists.newArrayList();
         long cost = System.currentTimeMillis();
         try {
             //gateway.login();
+            int total = checkItems.length;
+            //总权重 85%    index / total  * 85
+            int index = 1;
             for (CheckItem checkItem : checkItems) {
-                context.sendOutputMessage(Messageable.CHECKING_OUTPUT, "正在检测:" + checkItem.getName());
+                //debug FIXME
+                Thread.sleep(1000);
+                //debug
+
+                double process = (double)index / (double)total;
+                int processPercent = (int) (process * 85);
+                sendMessageToView(handler,MessageConst.CHECKING_OUTPUT, "正在检测:" + checkItem.getName(),processPercent);
                 CheckItem item = checkItem.check(gateway, context, webViewJs);
                 result.add(item);
+                index ++;
             }
            // gateway.logout();
     //        gateway.logout(deviceProfile);
@@ -153,6 +168,17 @@ public class CheckManager {
             return lastResult;
         }
 
+    }
+
+    public void sendMessageToView(Handler handler,int code, String msgInfo,int process){
+        Message msg = new Message();
+        //msg.set
+        msg.what = code;
+        Bundle bundle = new Bundle();
+        bundle.putCharSequence("msg", msgInfo);
+        bundle.putInt("process",process);
+        msg.setData(bundle);
+        handler.sendMessage(msg);
     }
 
 

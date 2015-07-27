@@ -52,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#3762ad">
+            android:background="#3762ad"
+            android:id="@+id/relativeLayout">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,6 +61,16 @@
                 android:layout_centerInParent="true"
                 android:text="dddd" />
         </RelativeLayout>
+
+        <com.aoppp.webviewdom.internal.WebViewJs
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/webView"
+            android:layout_weight="0.79"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/relativeLayout"
+            android:layout_toEndOf="@+id/relativeLayout">
+        </com.aoppp.webviewdom.internal.WebViewJs>
     </RelativeLayout>
 
     <RelativeLayout
