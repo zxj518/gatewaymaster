@@ -4,14 +4,16 @@
     android:layout_height="match_parent"
     android:background="@color/login_bg_color"
     android:orientation="vertical"
-    >
-
+    android:weightSum="1">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/navigation_my_bg" />
+        android:src="@mipmap/ic_launcher"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="120dp" />
 
     <LinearLayout
         android:layout_width="@dimen/common_btn_with"
@@ -26,6 +28,7 @@
 
 
         <!--android:layout_marginBottom="@dimen/signin_btn_margin_bottom"-->
+
         <EditText
             android:id="@+id/signin_device_ip"
             android:layout_width="@dimen/common_btn_with"
@@ -71,5 +74,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/login_btn_text_size" />
     </LinearLayout>
+
 
 </LinearLayout>
