@@ -18,6 +18,9 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class Gateway {
 
+
+
+
     protected DeviceProfile deviceProfile;
 
     public Gateway(DeviceProfile deviceProfile) {
@@ -57,13 +60,13 @@ public abstract class Gateway {
 
 
     public static Gateway build(DeviceProfile deviceProfile){
-        if(deviceProfile.getProvider().equals("zte")){
+        if(deviceProfile.getProvider().equals(DeviceProvider.ZTE.getSimpleName())){
             return new ZteGateway(deviceProfile);
-        }else if(deviceProfile.getProvider().equals("huawei")){
+        }else if(deviceProfile.getProvider().equals(DeviceProvider.HUAWEI.getSimpleName())){
             return new HwGateway(deviceProfile);
-        }else if(deviceProfile.getProvider().equals("bell")){
+        }else if(deviceProfile.getProvider().equals(DeviceProvider.BELL.getSimpleName())){
             return new BellGateway(deviceProfile);
-        }else if(deviceProfile.getProvider().equals("fiber")){
+        }else if(deviceProfile.getProvider().equals(DeviceProvider.FIBER.getSimpleName())){
             return new FiberGateway(deviceProfile);
         }else{
             return null;

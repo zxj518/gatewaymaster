@@ -26,8 +26,22 @@
 
 
         <!--android:layout_marginBottom="@dimen/signin_btn_margin_bottom"-->
+        <Button
+            android:id="@+id/login_provider_option"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="@dimen/password_text_margin_bottom"
+            android:gravity="left|center_vertical"
+            android:textColorHint="@color/input_hint"
+            android:textSize="@dimen/login_text_size"
+            android:hint="@string/login_device_ip"
+            android:text="@string/login_device_provider"
+            android:singleLine="true"
+            android:clickable="true"
+            android:drawableRight="@drawable/right_arrow"
+            />
         <EditText
-            android:id="@+id/signin_device_ip"
+            android:id="@+id/login_device_ip"
             android:layout_width="@dimen/common_btn_with"
             android:layout_height="@dimen/common_btn_height"
             android:layout_marginBottom="@dimen/password_text_margin_bottom"
@@ -38,7 +52,7 @@
             android:singleLine="true" />
 
         <EditText
-            android:id="@+id/signin_username"
+            android:id="@+id/login_username"
             android:layout_width="@dimen/common_btn_with"
             android:layout_height="@dimen/common_btn_height"
             android:layout_marginBottom="@dimen/password_text_margin_bottom"
@@ -49,7 +63,7 @@
             android:singleLine="true" />
 
         <EditText
-            android:id="@+id/signin_password"
+            android:id="@+id/login_password"
             android:layout_width="@dimen/common_btn_with"
             android:layout_height="@dimen/common_btn_height"
             android:layout_marginBottom="@dimen/password_text_margin_bottom"

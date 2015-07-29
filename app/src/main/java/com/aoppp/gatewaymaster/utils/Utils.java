@@ -18,7 +18,9 @@ package com.aoppp.gatewaymaster.utils;
 // TODO: Auto-generated Javadoc
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -28,6 +30,9 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.view.KeyEvent;
+
+import com.aoppp.gatewaymaster.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,5 +69,27 @@ public class Utils {
         PackageManager packageManager = activity.getPackageManager();
         List<ResolveInfo> activities = packageManager.queryIntentActivities(mapCall, 0);
         return activities.size() > 0;
+    }
+
+    public static ProgressDialog showProgressDialog(final Context context,
+                                                    String content) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setProgressStyle(R.style.progress_dialog);
+        progressDialog.setMessage(content);
+        progressDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode,
+                                 KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK
+                        && event.getRepeatCount() == 0) {
+//                    Logger.toast(
+//                            context,
+//                            R.string.please_waiting_your_request_will_be_confirm_soon);
+                    return true;
+                }
+                return false;
+            }
+        });
+        return progressDialog;
     }
 }

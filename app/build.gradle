@@ -28,14 +28,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.jakewharton:butterknife:6.0.0'
-    compile 'com.umeng.analytics:analytics:latest.integration'
 
-    compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
-    compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
-    compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
-    compile 'com.github.lawloretienne:quickreturn:0.0.1'
 
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile files('libs/umeng-update-v2.5.0.jar')
@@ -46,4 +39,12 @@ dependencies {
     compile files('libs/SocialSDK_QQZone_1.jar')
     compile project(':gatewaysdk')
     compile project(':webviewdom')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
+    compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
+    compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
+    compile 'com.github.lawloretienne:quickreturn:0.0.1'
+
 }

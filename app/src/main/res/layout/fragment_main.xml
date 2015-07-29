@@ -62,15 +62,7 @@
                 android:text="dddd" />
         </RelativeLayout>
 
-        <com.aoppp.webviewdom.internal.WebViewJs
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/webView"
-            android:layout_weight="0.79"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/relativeLayout"
-            android:layout_toEndOf="@+id/relativeLayout">
-        </com.aoppp.webviewdom.internal.WebViewJs>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -81,4 +73,12 @@
         <include layout="@layout/include_main_card" />
     </RelativeLayout>
 
+    <com.aoppp.webviewdom.internal.WebViewJs
+        android:layout_width="100dp"
+        android:layout_height="10dp"
+        android:id="@+id/webView"
+        >
+
+
+    </com.aoppp.webviewdom.internal.WebViewJs>
 </LinearLayout>
