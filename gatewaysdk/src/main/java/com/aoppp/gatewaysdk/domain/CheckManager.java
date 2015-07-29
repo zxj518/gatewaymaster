@@ -111,7 +111,7 @@ public class CheckManager {
 
                 double process = (double)index / (double)total;
                 int processPercent = (int) (process * 85);
-                sendMessageToView(handler,MessageConst.CHECKING_OUTPUT, "正在检测:" + checkItem.getName(),processPercent);
+                sendMessageToView(handler,MessageConst.CHECKING_OUTPUT, "正在检测:" + checkItem.getDesc(),processPercent);
                 CheckItem item = null;
                 try {
                     item = checkItem.check(gateway, context, webViewJs);
