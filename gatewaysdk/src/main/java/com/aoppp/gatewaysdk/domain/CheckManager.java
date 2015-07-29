@@ -1,6 +1,7 @@
 package com.aoppp.gatewaysdk.domain;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +26,7 @@ public class CheckManager {
 
     private static CheckManager instance;
 
-    private static CheckResult lastResult;
+    private static volatile CheckResult lastResult;
 
     private Gateway gateway;
 
@@ -111,9 +112,19 @@ public class CheckManager {
                 double process = (double)index / (double)total;
                 int processPercent = (int) (process * 85);
                 sendMessageToView(handler,MessageConst.CHECKING_OUTPUT, "正在检测:" + checkItem.getName(),processPercent);
-                CheckItem item = checkItem.check(gateway, context, webViewJs);
-                result.add(item);
-                index ++;
+                CheckItem item = null;
+                try {
+                    item = checkItem.check(gateway, context, webViewJs);
+                    result.add(item);
+                }catch (Exception ex){
+                    item = checkItem.clone();
+                    item.setState(-1);
+                    result.add(item);
+                }finally {
+                    index ++;
+                }
+
+
             }
            // gateway.logout();
     //        gateway.logout(deviceProfile);

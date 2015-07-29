@@ -34,7 +34,7 @@ public class FiberGateway extends Gateway {
         super(deviceProfile);
     }
 
-    public Cookie sessionCookie;
+    public volatile Cookie sessionCookie;
 
     private DefaultHttpClient client;
 
@@ -79,6 +79,10 @@ public class FiberGateway extends Gateway {
     public boolean logout() {
         try {
             HttpGet request = new HttpGet("http://" + deviceProfile.getIp() + "/ctlogout.cmd");
+            List<Cookie> cookies = client.getCookieStore().getCookies();
+            for (int i = 0; i < cookies.size(); i++) {
+                sessionCookie = cookies.get(i);
+            }
             if(sessionCookie != null) {
                 request.addHeader("Cookie", sessionCookie.getValue());
             }
