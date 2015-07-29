@@ -73,6 +73,8 @@ public class LoginActivity extends BaseActivity {
         txtIP.setText("192.168.1.1");
         txtUser.setText("telecomadmin");
         txtPwd.setText("telecomadmin");
+        providerButton.setFocusable(true);
+        providerButton.requestFocus();
     }
 
     private void onLogin(){
@@ -107,6 +109,7 @@ public class LoginActivity extends BaseActivity {
                 CheckManager.instance().willCheckDevice(loginProfile);
                 CheckManager.instance().login();
                 //CheckManager.instance().logout();
+                CheckManager.instance().logout();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -147,7 +150,7 @@ public class LoginActivity extends BaseActivity {
                         // of the selected item
                         String provider_pre = getResources().getString(R.string.login_device_provider);
                         String provider = which > -1 ? providerArray[which] : "";
-                        providerButton.setText(provider_pre + provider);
+                        providerButton.setText(provider_pre + "   " + provider);
                         currentProvider = DeviceProvider.toProviderByCnName(provider);
                     }
                 });
