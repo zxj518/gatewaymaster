@@ -41,6 +41,9 @@ public class HwGateway extends Gateway {
             DefaultHttpClient client = new DefaultHttpClient();
 
             HttpResponse res = client.execute(request);
+            if(res.getStatusLine().getStatusCode() != 200){
+                throw new RuntimeException(this.deviceProfile.getProvider() + " login fail. status code is " + res.getStatusLine().getStatusCode());
+            }
             //    c = new SimpleMatcher(c,"(.*)path=/").match();
             List<Cookie> cookies = client.getCookieStore().getCookies();
             for (int i = 0; i < cookies.size(); i++) {

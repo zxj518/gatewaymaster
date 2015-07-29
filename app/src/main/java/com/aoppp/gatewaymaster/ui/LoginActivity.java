@@ -76,12 +76,10 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void onLogin(){
-        if(currentProvider==null){
-            return;
+        if(!validate()){
+            return ;
         }
-        if(txtIP.getText().length()==0){
-            return;
-        }
+
 
 
 
@@ -90,6 +88,38 @@ public class LoginActivity extends BaseActivity {
 
         new Thread(new LoginTask(profile)).start();
         progressDialog.show();
+    }
+
+    private boolean validate() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("请提供更多信息");
+        if(currentProvider==null){
+            builder.setMessage("请选择厂商信息");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return false;
+        }
+        if(txtIP.getText().length()==0){
+            builder.setMessage("IP地址不能为空");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return false;
+        }
+
+        if(txtUser.getText().length()==0){
+            builder.setMessage("管理员账户不能为空");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return false;
+        }
+
+        if(txtPwd.getText().length()==0){
+            builder.setMessage("管理员密码不能为空");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return false;
+        }
+        return true;
     }
 
 
@@ -106,7 +136,7 @@ public class LoginActivity extends BaseActivity {
                 CheckManager.instance().loadCheckConf(LoginActivity.this);
                 CheckManager.instance().willCheckDevice(loginProfile);
                 CheckManager.instance().login();
-                //CheckManager.instance().logout();
+                CheckManager.instance().logout();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -127,13 +157,12 @@ public class LoginActivity extends BaseActivity {
         private  void done(boolean success){
             progressDialog.hide();
             if(success) {
-                try {
-                    CheckManager.instance().logout();
-                    //logout
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 startActivity(MainActivity.class);
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("登录失败,请检查提供的信息是否正确");
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         }
     };

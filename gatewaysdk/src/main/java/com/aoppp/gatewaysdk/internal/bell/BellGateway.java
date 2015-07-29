@@ -32,6 +32,9 @@ public class BellGateway extends Gateway {
                 .build();
         try {
             Response res = client.newCall(request).execute();
+            if(!res.isSuccessful()){
+                throw new RuntimeException(this.deviceProfile.getProvider() + " login fail. status code is " + res.code());
+            }
             String string = res.body().string();
             return true;
         } catch (IOException e) {
