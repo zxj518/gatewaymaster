@@ -124,9 +124,15 @@ public class LoginActivity extends BaseActivity {
             }
         }
 
-        private  void done(boolean secceed){
+        private  void done(boolean success){
             progressDialog.hide();
-            if(secceed) {
+            if(success) {
+                try {
+                    CheckManager.instance().logout();
+                    //logout
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 startActivity(MainActivity.class);
             }
         }

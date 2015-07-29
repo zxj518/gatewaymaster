@@ -59,8 +59,8 @@ public class CheckManager {
     public void clear(Activity activity){
         //TODO manage check thread
         this.gateway.clearCache(activity);
-        this.deviceProfile = null;
-        this.gateway = null;
+//        this.deviceProfile = null;
+//        this.gateway = null;
 
     }
 

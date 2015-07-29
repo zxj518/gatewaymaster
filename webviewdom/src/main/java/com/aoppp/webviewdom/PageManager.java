@@ -30,7 +30,7 @@ public class PageManager {
 
     private Map<String, String> cache = new Hashtable<>();
 
-    private String[] supportDeviceType = new String[]{"huawei","zte","bell","fiber"};
+    private String[] supportDeviceType = new String[]{"HUAWEI","ZTE","BELL","FIBER"};
 
     private PageManager(Activity activity) {
         Gson gson = new Gson();

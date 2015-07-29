@@ -128,10 +128,10 @@ public class MainFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final DeviceProfile profile = CheckManager.instance().getDefaultProfile();
+//                final DeviceProfile profile = CheckManager.instance().getDefaultProfile();
                 long timeBegin = System.currentTimeMillis();
                 try {
-                    CheckManager.instance().willCheckDevice(profile);
+//                    CheckManager.instance().willCheckDevice(profile);
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "正在登录", 3);
                     CheckManager.instance().login();
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "开始执行检查..", 5);
