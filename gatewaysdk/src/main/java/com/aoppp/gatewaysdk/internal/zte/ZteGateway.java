@@ -38,6 +38,9 @@ public class ZteGateway extends Gateway {
                 .build();
         try {
             Response res = client.newCall(request).execute();
+            if(!res.isSuccessful()){
+                throw new RuntimeException(this.deviceProfile.getProvider() + " login fail. status code is " + res.code());
+            }
             String string = res.body().string();
         } catch (IOException e) {
             e.printStackTrace();
