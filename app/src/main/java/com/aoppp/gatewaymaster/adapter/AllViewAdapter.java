@@ -62,10 +62,6 @@ public class AllViewAdapter extends BaseAdapter {
                     .findViewById(R.id.name);
             holder.memory = (TextView) convertView
                     .findViewById(R.id.memory);
-
-            holder.cb = (RadioButton) convertView
-                    .findViewById(R.id.choice_radio);
-            convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -83,11 +79,6 @@ public class AllViewAdapter extends BaseAdapter {
             sb.append("NONE");
         }
         holder.memory.setText(sb.toString());
-        if (appInfo.getState() == 1) {
-            holder.cb.setChecked(true);
-        } else {
-            holder.cb.setChecked(false);
-        }
 
         return convertView;
     }
@@ -96,17 +87,6 @@ public class AllViewAdapter extends BaseAdapter {
         ImageView appIcon;
         TextView appName;
         TextView memory;
-        TextView tvProcessMemSize;
-        RelativeLayout cb_rl;
-        RadioButton cb;
-
-        public RadioButton getCb() {
-            return cb;
-        }
-
-        public void setCb(RadioButton cb) {
-            this.cb = cb;
-        }
     }
 
 }

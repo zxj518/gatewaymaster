@@ -1,5 +1,6 @@
 package com.aoppp.gatewaymaster.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,11 +17,13 @@ import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
+import com.aoppp.gatewaymaster.ui.AllViewActivity;
 import com.aoppp.gatewaymaster.ui.MainActivity;
 import com.aoppp.gatewaymaster.ui.MemoryCleanActivity;
 import com.aoppp.gatewaymaster.utils.Utils;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
 import com.aoppp.gatewaysdk.MessageConst;
+import com.aoppp.gatewaysdk.domain.CheckItem;
 import com.aoppp.gatewaysdk.domain.CheckManager;
 import com.aoppp.gatewaysdk.domain.CheckResult;
 import com.aoppp.gatewaysdk.domain.DeviceProfile;
@@ -126,13 +129,14 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.card1)
     void speedUp() {
-        onCheckStart();
+        onCheckStart(null,MemoryCleanActivity.class);
         //startActivity(MemoryCleanActivity.class);
     }
 
 
     @OnClick(R.id.card2)
     void rubbishClean() {
+        onCheckStart("allView", AllViewActivity.class);
         //startActivity(RubbishCleanActivity.class);
     }
 
@@ -161,7 +165,7 @@ public class MainFragment extends BaseFragment {
         super.onDestroy();
     }
 
-    private void onCheckStart() {
+    private void onCheckStart(final String group, final Class<? extends Activity> activity) {
 
         RouterCheckConf conf = RouterCheckConf.loadConf(this.getActivity());
         capacity.setText("正在检测..");
@@ -176,7 +180,12 @@ public class MainFragment extends BaseFragment {
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "正在登录", 3);
                     CheckManager.instance().login();
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "开始执行检查..", 5);
-                    final CheckResult result = CheckManager.instance().check(MainFragment.this.getActivity(), MainFragment.this.mHandler, webView);
+                    if(group == null){
+                        CheckManager.instance().check(MainFragment.this.getActivity(), MainFragment.this.mHandler, webView);
+                    }else{
+                        CheckManager.instance().check(MainFragment.this.getActivity(), MainFragment.this.mHandler, webView,group);
+                    }
+
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "完成检查..", 90);
                     sendOutputMessage(MessageConst.CHECKING_OUTPUT, "注销登录..", 95);
                     CheckManager.instance().logout();
@@ -204,14 +213,14 @@ public class MainFragment extends BaseFragment {
                     @Override
                     public void run() {
 
-                        checkCompleted(CheckManager.getLastCheckResult());
+                        checkCompleted(CheckManager.getLastCheckResult(),activity);
                     }
                 });
             }
         }).start();
     }
 
-    public void checkCompleted(CheckResult result) {
+    public void checkCompleted(CheckResult result,Class<? extends Activity> activity) {
 
         if (result.getErrorCode() < 0) {
             AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle("Error").setMessage(result.getErrorMessage()).create();
@@ -219,7 +228,7 @@ public class MainFragment extends BaseFragment {
         } else {
             Intent intent = new Intent();
             intent.putExtra("result", result.getErrorCode());
-            intent.setClass(getActivity(), MemoryCleanActivity.class);
+            intent.setClass(getActivity(), activity);
             startActivityForResult(intent, 2);
         }
     }

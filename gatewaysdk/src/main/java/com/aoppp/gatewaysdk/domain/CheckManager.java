@@ -24,6 +24,8 @@ public class CheckManager {
 
     private RouterCheckConf checkConf;
 
+    private GroupConf groupConf;
+
     private static CheckManager instance;
 
     private static volatile CheckResult lastResult;
@@ -48,6 +50,8 @@ public class CheckManager {
 
     public void loadCheckConf(Context context){
        checkConf = RouterCheckConf.loadConf(context);
+        groupConf = GroupConf.loadConf(context);
+
     }
 
     public void willCheckDevice(DeviceProfile deviceProfile){
@@ -66,6 +70,19 @@ public class CheckManager {
 
     public CheckItem[] getAllCheckItems(){
         return checkConf.getCheckItems();
+    }
+
+    public CheckItem[] getCheckItemsByGroup(String groupName){
+        List<String> names = groupConf.groups.get(groupName);
+        List<CheckItem> result = Lists.newArrayList();
+        if(names != null){
+            for(CheckItem checkItem : getAllCheckItems()){
+                if(names.contains(checkItem.getName())){
+                    result.add(checkItem);
+                }
+            }
+        }
+        return result.toArray(new CheckItem[result.size()]);
     }
 
 
@@ -93,6 +110,13 @@ public class CheckManager {
             throw new Exception("Please set device profile first.");
         }
         return check(context, handler, webViewJs, checkConf.getCheckItems());
+    }
+
+    public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs,String groupName) throws Exception{
+        if(gateway==null){
+            throw new Exception("Please set device profile first.");
+        }
+        return check(context, handler, webViewJs, this.getCheckItemsByGroup(groupName));
     }
 
     public CheckResult check(Activity context,Handler handler,WebViewJs webViewJs , CheckItem[] checkItems){
