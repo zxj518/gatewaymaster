@@ -2,6 +2,7 @@
     <string name="app_name">网关助手</string>
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
+    <string name="login_activity_title">登录</string>
     <string name="login_device_ip">网关IP</string>
     <string name="login_device_admin">管理员</string>
     <string name="login_device_pwd">密码</string>
