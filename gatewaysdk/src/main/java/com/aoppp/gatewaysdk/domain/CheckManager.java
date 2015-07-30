@@ -148,8 +148,15 @@ public class CheckManager {
         handler.sendMessage(msg);
     }
 
+    public DeviceProfile getDeviceProfile() {
+        return deviceProfile;
+    }
 
-    public DeviceProfile getDefaultProfile(){
+    public Gateway getGateway() {
+        return gateway;
+    }
+
+    private DeviceProfile getDefaultProfile(){
 
 //        DeviceProfile profile = new DeviceProfile("zte","telecomadmin", "telecomadmin12223015", "192.168.1.101");
 //        DeviceProfile profile = new DeviceProfile("huawei","telecomadmin", "nE7jA%5m", "192.168.1.102");
