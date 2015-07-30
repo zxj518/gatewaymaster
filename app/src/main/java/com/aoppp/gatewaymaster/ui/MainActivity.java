@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +24,7 @@ import com.aoppp.gatewaymaster.fragments.RelaxFragment;
 import com.aoppp.gatewaymaster.utils.SystemBarTintManager;
 import com.aoppp.gatewaymaster.utils.T;
 import com.aoppp.gatewaymaster.utils.UIElementsHelper;
+import com.aoppp.gatewaysdk.domain.CheckManager;
 import com.ikimuhendis.ldrawer.ActionBarDrawerToggle;
 import com.ikimuhendis.ldrawer.DrawerArrowDrawable;
 
@@ -100,12 +102,12 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,7 +123,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
             }
         }
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+        if(id==R.id.action_logout){
+            logout();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -255,5 +261,10 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void logout(){
+        CheckManager.instance().clear(this);
+        startActivity(LoginActivity.class);
     }
 }
