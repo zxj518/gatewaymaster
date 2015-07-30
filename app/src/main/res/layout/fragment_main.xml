@@ -13,7 +13,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_height="200dip">
+            android:layout_height="200dip"
+            android:id="@+id/relativeLayout2">
 
             <RelativeLayout
                 android:id="@+id/arc_left"
@@ -27,7 +28,7 @@
                     android:layout_height="180dp"
                     custom:arc_bottom_text="存储空间"
                     custom:arc_bottom_text_size="18dip"
-                    custom:arc_progress="10"
+                    custom:arc_progress="0"
                     custom:arc_stroke_width="8dip"
                     custom:arc_text_color="#ffffff"
                     custom:arc_text_size="32dip" />
@@ -39,28 +40,24 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="12dip"
-                    android:text="20/30"
+                    android:text=""
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="55dip" />
             </RelativeLayout>
 
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/versionLabel"
+            android:textColor="@color/white"
             android:layout_alignParentBottom="true"
-            android:background="#3762ad"
-            android:id="@+id/relativeLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="dddd" />
-        </RelativeLayout>
+            android:layout_alignLeft="@+id/relativeLayout2"
+            android:layout_alignStart="@+id/relativeLayout2"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
 
     </RelativeLayout>

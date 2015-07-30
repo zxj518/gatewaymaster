@@ -1,6 +1,7 @@
 package com.aoppp.gatewaymaster.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,15 +18,23 @@ import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
 import com.aoppp.gatewaymaster.ui.MainActivity;
 import com.aoppp.gatewaymaster.ui.MemoryCleanActivity;
+import com.aoppp.gatewaymaster.utils.Utils;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
 import com.aoppp.gatewaysdk.MessageConst;
 import com.aoppp.gatewaysdk.domain.CheckManager;
 import com.aoppp.gatewaysdk.domain.CheckResult;
 import com.aoppp.gatewaysdk.domain.DeviceProfile;
+import com.aoppp.gatewaysdk.domain.DeviceProvider;
+import com.aoppp.gatewaysdk.domain.Indicator;
 import com.aoppp.gatewaysdk.domain.RouterCheckConf;
+import com.aoppp.webviewdom.IndicatorResult;
+import com.aoppp.webviewdom.PageManager;
 import com.aoppp.webviewdom.internal.WebViewJs;
 import com.umeng.update.UmengUpdateAgent;
 
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,29 +46,67 @@ public class MainFragment extends BaseFragment {
     @InjectView(R.id.arc_store)
     ArcProgress arcStore;
 
-//    @InjectView(R.id.arc_process)
-//    ArcProgress arcProcess;
-
     @InjectView(R.id.capacity)
     TextView capacity;
+
+    @InjectView(R.id.versionLabel)
+    TextView versionLabel;
 
     Context mContext;
     @InjectView(R.id.webView)
     WebViewJs webView;
-
-//    private Timer timer;
-//    private Timer timer2;
+    private ProgressDialog progressDialog;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
         mContext = getActivity();
         CheckManager.instance().loadCheckConf(mContext);
+        String provider = CheckManager.instance().getDeviceProfile().getProvider();
+        arcStore.setBottomText(DeviceProvider.toProvider(provider).getCnName());
+        final DeviceProfile deviceProfile = CheckManager.instance().getDeviceProfile();
+        progressDialog = Utils.showProgressDialog(getActivity(), "正在获取版本信息..");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    CheckManager.instance().login();
+                    final IndicatorResult hardware_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+                            webView, deviceProfile.getProvider(),
+                            deviceProfile.getIp(), "hardware_version",
+                            60, TimeUnit.SECONDS,true);
+                    final IndicatorResult software_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+                            webView, deviceProfile.getProvider(),
+                            deviceProfile.getIp(), "software_version",
+                            60, TimeUnit.SECONDS,true);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("硬件版本:").append(hardware_version.getResult().get("hardware_version"));
+                            stringBuilder.append("\n");
+                            stringBuilder.append("软件版本:").append(software_version.getResult().get("software_version"));
+                            versionLabel.setText(stringBuilder.toString());
+                            progressDialog.cancel();
+                        }
+                    });
+                }catch (Exception e){
+                    Log.e(this.getClass().getCanonicalName(),"fetch version error",e);
+                }finally {
+                    try {
+                        CheckManager.instance().logout();
+                    } catch (Exception e) {
+                        Log.e(this.getClass().getCanonicalName(), "logout error", e);
+                    }
+                }
+            }
+        }).start();
+        progressDialog.show();
 
         return view;
     }
@@ -68,7 +115,6 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        fillData();
     }
 
     @Override
@@ -76,11 +122,6 @@ public class MainFragment extends BaseFragment {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
         UmengUpdateAgent.update(getActivity());
-    }
-
-    private void fillData() {
-        arcStore.setProgress(0);
-
     }
 
     @OnClick(R.id.card1)

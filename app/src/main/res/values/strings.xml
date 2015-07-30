@@ -9,10 +9,10 @@
     <string name="login_btn_login">登录</string>
     <string name="login_device_provider">厂商:</string>
 
-    <string name="app_memory_clean">内存加速</string>
-    <string name="app_rublish_clean">垃圾清理</string>
-    <string name="app_autostart_manage">自启管理</string>
-    <string name="app_software_manage">软件管理</string>
+    <string name="app_memory_clean">全面检查</string>
+    <string name="app_rublish_clean">链路检查</string>
+    <string name="app_autostart_manage">光口检查</string>
+    <string name="app_software_manage">业务检查</string>
 
     <string name="app_global_check">全面体检</string>
     <string name="app_basic_info">基本信息</string>
