@@ -23,16 +23,19 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="ActionbarNoIcon" parent="AppTheme">
+    <!--tyle name="ActionbarNoIcon" parent="AppTheme">
         <item name="android:actionBarStyle">@style/ActionBarStyle</item>
-    </style>
+    </style-->
 
     <style name="ActionBarStyle" parent="MyActionBar">
-        <item name="android:displayOptions">useLogo</item>
+        <item name="android:displayOptions">useLogo|showHome|showTitle</item>
     </style>
 
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+
         <item name="android:background">@drawable/gray_drawable</item>
+        <item name="android:displayOptions">homeAsUp|showTitle|showCustom|useLogo</item>
+
     </style>
 
     <style name="TranslateThemeFull" parent="@android:style/Theme.NoTitleBar.Fullscreen">
@@ -41,7 +44,7 @@
 
     <style name="MyAppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
-        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
 
     </style>
 
@@ -49,11 +52,11 @@
     <style name="MyTranslucentAppTheme" parent="MyAppTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
-    <style name="ActionBar" parent="android:Widget.ActionBar">
+    <style name="ActionBar" parent="android:Widget.Holo.ActionBar">
         <item name="android:background">@drawable/gray_drawable</item>
-        <item name="android:icon">@android:color/transparent</item>
+        <!--item name="android:icon">@android:color/transparent</item-->
         <item name="android:titleTextStyle">@style/ActionBar.TitleText</item>
-
+        <item name="android:displayOptions">homeAsUp|showTitle|showCustom|useLogo</item>
     </style>
 
     <style name="ActionBar.TitleText" parent="android:TextAppearance.Holo.Widget.ActionBar.Title">

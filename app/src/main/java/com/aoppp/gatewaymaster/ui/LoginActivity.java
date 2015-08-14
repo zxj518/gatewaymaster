@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +68,9 @@ public class LoginActivity extends BaseActivity {
         });
         progressDialog = Utils.showProgressDialog(this, "正在登录..");
         initData();
+
+        getActionBar().setHomeButtonEnabled(false);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void initData(){
@@ -75,6 +79,13 @@ public class LoginActivity extends BaseActivity {
         txtPwd.setText("telecomadmin");
         providerButton.setFocusable(true);
         providerButton.requestFocus();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     private void onLogin(){
