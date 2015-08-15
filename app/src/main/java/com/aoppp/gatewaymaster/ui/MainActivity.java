@@ -20,7 +20,7 @@ import com.aoppp.gatewaymaster.base.ActivityTack;
 import com.aoppp.gatewaymaster.base.BaseActivity;
 import com.aoppp.gatewaymaster.fragments.MainFragment;
 import com.aoppp.gatewaymaster.fragments.NavigationDrawerFragment;
-import com.aoppp.gatewaymaster.fragments.RelaxFragment;
+import com.aoppp.gatewaymaster.fragments.SettingsFragment;
 import com.aoppp.gatewaymaster.utils.SystemBarTintManager;
 import com.aoppp.gatewaymaster.utils.T;
 import com.aoppp.gatewaymaster.utils.UIElementsHelper;
@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
     private View mFragmentContainerView;
 
     MainFragment mMainFragment;
-    RelaxFragment mRelaxFragment;
+//    RelaxFragment mRelaxFragment;
     public static final long TWO_SECOND = 2 * 1000;
     long preTime;
     @Override
@@ -200,21 +200,11 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
                 transaction.commit();
 
                 break;
+
             case 1:
-                closeDrawer();
-                if (mRelaxFragment == null) {
-                    mRelaxFragment = new RelaxFragment();
-                    transaction.add(R.id.container, mRelaxFragment);
-                } else {
-                    transaction.show(mRelaxFragment);
-                }
-                transaction.commit();
-
-                break;
-            case 2:
 
                 closeDrawer();
-                //SettingsFragment.launch(MainActivity.this);
+                SettingsFragment.launch(MainActivity.this);
                 break;
 
             // fragment = new SettingsFragment();
@@ -228,9 +218,9 @@ public class MainActivity extends BaseActivity implements NavigationDrawerFragme
         if (mMainFragment != null) {
             transaction.hide(mMainFragment);
         }
-        if (mRelaxFragment != null) {
-            transaction.hide(mRelaxFragment);
-        }
+//        if (mRelaxFragment != null) {
+//            transaction.hide(mRelaxFragment);
+//        }
 
     }
 

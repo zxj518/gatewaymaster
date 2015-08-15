@@ -13,9 +13,9 @@ import com.aoppp.gatewaymaster.base.FragmentContainerActivity;
 import com.aoppp.gatewaymaster.utils.AppUtil;
 import com.aoppp.gatewaymaster.utils.T;
 import com.aoppp.gatewaymaster.utils.Utils;
-import com.umeng.socialize.bean.RequestType;
-import com.umeng.socialize.controller.UMServiceFactory;
-import com.umeng.socialize.controller.UMSocialService;
+//import com.umeng.socialize.bean.RequestType;
+//import com.umeng.socialize.controller.UMServiceFactory;
+//import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.update.UmengUpdateAgent;
 import com.umeng.update.UmengUpdateListener;
@@ -30,10 +30,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         FragmentContainerActivity.launch(from, SettingsFragment.class, null);
     }
 
-    private Preference createShortCut;
+    //private Preference createShortCut;
     private Preference pVersion;
     private Preference pVersionDetail;
-    private Preference pGithub;// Github
+
     private Preference pGrade;// Github
     private Preference pShare;// Github
     private Preference pAbout;// Github
@@ -47,21 +47,20 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //addPreferencesFromResource(R.xml.ui_settings);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        addPreferencesFromResource(R.xml.ui_settings);
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
         getActivity().getActionBar().setDisplayShowHomeEnabled(false);
         getActivity().getActionBar().setTitle(R.string.title_settings);
 
-        createShortCut = findPreference("createShortCut");
-        createShortCut.setOnPreferenceClickListener(this);
+//        createShortCut = findPreference("createShortCut");
+//        createShortCut.setOnPreferenceClickListener(this);
         pVersion = findPreference("pVersion");
         pVersion.setOnPreferenceClickListener(this);
         pVersionDetail = findPreference("pVersionDetail");
         pVersionDetail.setSummary("当前版本：" + AppUtil.getVersion(getActivity()));
         pVersionDetail.setOnPreferenceClickListener(this);
 
-        pGithub = findPreference("pGithub");
-        pGithub.setOnPreferenceClickListener(this);
+
         pGrade = findPreference("pGrade");
         pGrade.setOnPreferenceClickListener(this);
         pShare = findPreference("pShare");
@@ -77,16 +76,16 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if ("createShortCut".equals(preference.getKey())) {
             //createShortCut();
         } else if ("pVersion".equals(preference.getKey())) {
-            UmengUpdateAgent.forceUpdate(getActivity());
-            UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
-                @Override
-                public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                    if (i != 0) {
-                        T.showLong(getActivity(), "当前版本为最新版本！");
-                    }
-
-                }
-            });
+//            UmengUpdateAgent.forceUpdate(getActivity());
+//            UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+//                @Override
+//                public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+//                    if (i != 0) {
+//                        T.showLong(getActivity(), "当前版本为最新版本！");
+//                    }
+//
+//                }
+//            });
         } else if ("pVersionDetail".equals(preference.getKey())) {
             //VersionFragment.launch(getActivity());
         } else if ("pGithub".equals(preference.getKey())) {
@@ -104,22 +103,22 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private void shareMyApp() {
 
-        UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share", RequestType.SOCIAL);
-        mController.setShareContent("一键清理（开源版）一键清理手机进程，真心不错呀,推荐您使用！.");
-        mController.openShare(getActivity(), false);
+//        UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share", RequestType.SOCIAL);
+//        mController.setShareContent("一键清理（开源版）一键清理手机进程，真心不错呀,推荐您使用！.");
+//        mController.openShare(getActivity(), false);
 
     }
 
     private void initData() {
-        String appID = "wxa263da737a20300e";
-        String appSecret = "381a2fab6466410c674afaa40c77c953";
-// 添加微信平台
-        UMWXHandler wxHandler = new UMWXHandler(getActivity(),appID,appSecret);
-        wxHandler.addToSocialSDK();
-// 添加微信朋友圈
-        UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),appID,appSecret);
-        wxCircleHandler.setToCircle(true);
-        wxCircleHandler.addToSocialSDK();
+//        String appID = "wxa263da737a20300e";
+//        String appSecret = "381a2fab6466410c674afaa40c77c953";
+//// 添加微信平台
+//        UMWXHandler wxHandler = new UMWXHandler(getActivity(),appID,appSecret);
+//        wxHandler.addToSocialSDK();
+//// 添加微信朋友圈
+//        UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),appID,appSecret);
+//        wxCircleHandler.setToCircle(true);
+//        wxCircleHandler.addToSocialSDK();
 
 
 

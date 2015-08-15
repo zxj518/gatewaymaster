@@ -20,8 +20,18 @@
     <string name="app_buz_check">业务检查</string>
 
 
+
     <string name="action_settings">Settings</string>
     <string name="action_logout">注销</string>
+
+    <string name="category_other">其他</string>
+    <string name="category_def">常规设置</string>
+    <string name="settings_basic">基本设置</string>
+    <string name="category_advanced">高级设置</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_version_update">检查更新</string>
+    <string name="settings_grade">给我好评</string>
+    <string name="settings_share">推荐给好友</string>
 
     <string name="title_settings">设置</string>
     <string name="title_activity_settings">Settings</string>
