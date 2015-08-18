@@ -23,6 +23,8 @@ public abstract class Gateway {
 
     protected DeviceProfile deviceProfile;
 
+    protected DeviceBasicInfo basicInfo;
+
     public Gateway(DeviceProfile deviceProfile) {
 
         this.deviceProfile = deviceProfile;
@@ -58,6 +60,14 @@ public abstract class Gateway {
         PageManager.getInstance(activity).clearCache();
     }
 
+
+    public DeviceBasicInfo getBasicInfo() {
+        return basicInfo;
+    }
+
+    public void setBasicInfo(DeviceBasicInfo basicInfo) {
+        this.basicInfo = basicInfo;
+    }
 
     public static Gateway build(DeviceProfile deviceProfile){
         if(deviceProfile.getProvider().equals(DeviceProvider.ZTE.getSimpleName())){

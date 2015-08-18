@@ -155,7 +155,7 @@ public class CheckManager {
 
         }finally {
             cost = System.currentTimeMillis() - cost;
-            lastResult =  new CheckResult(0,"",result, cost);
+            lastResult =  new CheckResult(getDeviceProfile(), 0,"",result, cost);
             return lastResult;
         }
 

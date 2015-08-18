@@ -7,6 +7,10 @@ import java.util.List;
  * Created by guguyanhua on 6/24/15.
  */
 public class CheckResult {
+
+
+
+    DeviceProfile deviceProfile;
     int errorCode;
     String errorMessage;
     List<CheckItem> checkItemList ;
@@ -14,14 +18,16 @@ public class CheckResult {
 
 
 
-    public CheckResult(int errorCode, String errorMessage, List<CheckItem> checkItemList,long cost) {
+    public CheckResult(DeviceProfile deviceProfile, int errorCode, String errorMessage, List<CheckItem> checkItemList,long cost) {
+        this.deviceProfile = deviceProfile;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.checkItemList = checkItemList;
         this.cost = cost;
     }
 
-    public CheckResult(int errorCode, String errorMessage, CheckItem[] checkItems,long cost) {
+    public CheckResult(DeviceProfile deviceProfile, int errorCode, String errorMessage, CheckItem[] checkItems,long cost) {
+        this.deviceProfile = deviceProfile;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.checkItemList = Arrays.asList(checkItems);
@@ -58,6 +64,10 @@ public class CheckResult {
 
     public void setCheckItemList(List<CheckItem> checkItemList) {
         this.checkItemList = checkItemList;
+    }
+
+    public DeviceProfile getDeviceProfile() {
+        return deviceProfile;
     }
 
     @Override

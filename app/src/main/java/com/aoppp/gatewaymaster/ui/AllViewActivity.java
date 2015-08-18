@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.adapter.AllViewAdapter;
-import com.aoppp.gatewaymaster.adapter.ClearMemoryAdapter;
 import com.aoppp.gatewaymaster.base.BaseSwipeBackActivity;
 import com.aoppp.gatewaymaster.utils.SystemBarTintManager;
 import com.aoppp.gatewaymaster.utils.UIElementsHelper;
@@ -71,7 +70,7 @@ AllViewAdapter mClearMemoryAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memory_clean);
+        setContentView(R.layout.activity_full_check);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //  applyKitKatTranslucency();
         List<CheckItem> checkItems = CheckManager.getLastCheckResult().getCheckItemList();

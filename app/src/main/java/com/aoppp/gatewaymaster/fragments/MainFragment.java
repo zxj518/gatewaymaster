@@ -18,17 +18,15 @@ import android.widget.TextView;
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseFragment;
 import com.aoppp.gatewaymaster.ui.AllViewActivity;
-import com.aoppp.gatewaymaster.ui.MainActivity;
-import com.aoppp.gatewaymaster.ui.MemoryCleanActivity;
+import com.aoppp.gatewaymaster.ui.FullCheckActivity;
 import com.aoppp.gatewaymaster.utils.Utils;
 import com.aoppp.gatewaymaster.widget.circleprogress.ArcProgress;
 import com.aoppp.gatewaysdk.MessageConst;
-import com.aoppp.gatewaysdk.domain.CheckItem;
 import com.aoppp.gatewaysdk.domain.CheckManager;
 import com.aoppp.gatewaysdk.domain.CheckResult;
+import com.aoppp.gatewaysdk.domain.DeviceBasicInfo;
 import com.aoppp.gatewaysdk.domain.DeviceProfile;
 import com.aoppp.gatewaysdk.domain.DeviceProvider;
-import com.aoppp.gatewaysdk.domain.Indicator;
 import com.aoppp.gatewaysdk.domain.RouterCheckConf;
 import com.aoppp.webviewdom.IndicatorResult;
 import com.aoppp.webviewdom.PageManager;
@@ -36,7 +34,6 @@ import com.aoppp.webviewdom.internal.WebViewJs;
 import com.umeng.update.UmengUpdateAgent;
 
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -78,22 +75,34 @@ public class MainFragment extends BaseFragment {
             public void run() {
                 try {
                     CheckManager.instance().login();
-                    final IndicatorResult hardware_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+                    final IndicatorResult deviceTypeResult = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
                             webView, deviceProfile.getProvider(),
-                            deviceProfile.getIp(), "hardware_version",
+                            deviceProfile.getIp(), "device_type",
                             60, TimeUnit.SECONDS,true);
-                    final IndicatorResult software_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+                    final IndicatorResult deviceSNResult = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
                             webView, deviceProfile.getProvider(),
-                            deviceProfile.getIp(), "software_version",
+                            deviceProfile.getIp(), "device_sn",
                             60, TimeUnit.SECONDS,true);
+//                    final IndicatorResult hardware_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+//                            webView, deviceProfile.getProvider(),
+//                            deviceProfile.getIp(), "hardware_version",
+//                            60, TimeUnit.SECONDS,true);
+//                    final IndicatorResult software_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+//                            webView, deviceProfile.getProvider(),
+//                            deviceProfile.getIp(), "software_version",
+//                            60, TimeUnit.SECONDS,true);
+                    String deviceType = deviceTypeResult.getResult().get("device_type");
+                    String deviceSN = deviceSNResult.getResult().get("device_sn");
+                    final DeviceBasicInfo basicInfo = new DeviceBasicInfo(deviceType, deviceSN);
+                    CheckManager.instance().getGateway().setBasicInfo(basicInfo);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
                             StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("硬件版本:").append(hardware_version.getResult().get("hardware_version"));
+                            stringBuilder.append("设备型号:").append(deviceProfile.getProvider() + " " + basicInfo.getDeviceType());
                             stringBuilder.append("\n");
-                            stringBuilder.append("软件版本:").append(software_version.getResult().get("software_version"));
+                            stringBuilder.append("设备标识:").append(basicInfo.getDeviceSN());
                             versionLabel.setText(stringBuilder.toString());
                             progressDialog.cancel();
                         }
@@ -129,8 +138,8 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.card1)
     void speedUp() {
-        onCheckStart(null,MemoryCleanActivity.class);
-        //startActivity(MemoryCleanActivity.class);
+        onCheckStart(null,FullCheckActivity.class);
+        //startActivity(FullCheckActivity.class);
     }
 
 
@@ -197,7 +206,7 @@ public class MainFragment extends BaseFragment {
                     CheckResult result = CheckManager.getLastCheckResult();
                     long timeUsed = System.currentTimeMillis() - timeBegin;
                     if (result == null) {
-                        result = new CheckResult(-1, ex.getMessage(), CheckManager.instance().getAllCheckItems(), timeUsed);
+                        result = new CheckResult(CheckManager.instance().getDeviceProfile(), -1, ex.getMessage(), CheckManager.instance().getAllCheckItems(), timeUsed);
                         CheckManager.setLastCheckResult(result);
                     } else {
                         result.setErrorCode(-1);

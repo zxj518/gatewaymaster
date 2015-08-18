@@ -58,7 +58,7 @@
             android:theme="@style/MyAppTheme" >
         </activity>
         <activity
-            android:name=".ui.MemoryCleanActivity"
+            android:name=".ui.FullCheckActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyTranslucentAppTheme" >
