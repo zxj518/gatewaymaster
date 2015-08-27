@@ -38,4 +38,6 @@
     <string name="title_activity_provider">设备厂商</string>
 
     <string name="pick_privoder">选择厂商</string>
+
+    <string name="msg_load_device_info_failed">加载设备信息出错</string>
 </resources>

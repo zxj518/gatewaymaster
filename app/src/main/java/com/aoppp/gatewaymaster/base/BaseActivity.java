@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.dialogs.ProgressDialogFragment;
 import com.aoppp.gatewaymaster.utils.T;
-import com.umeng.analytics.MobclickAgent;
+//import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 
@@ -137,11 +137,11 @@ public abstract class BaseActivity extends FragmentActivity {
 
     public void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+        //MobclickAgent.onResume(this);
     }
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+        //MobclickAgent.onPause(this);
     }
 
 }

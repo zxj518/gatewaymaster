@@ -1,7 +1,6 @@
 package com.aoppp.gatewaysdk.domain;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,9 +21,13 @@ public class CheckManager {
 
     private DeviceProfile deviceProfile;
 
-    private RouterCheckConf checkConf;
+    private DeviceCheckConf checkConf;
 
     private GroupConf groupConf;
+
+    private DeviceCheckConf collectConf;
+
+
 
     private static CheckManager instance;
 
@@ -49,8 +52,10 @@ public class CheckManager {
 
 
     public void loadCheckConf(Context context){
-       checkConf = RouterCheckConf.loadConf(context);
+        checkConf = DeviceCheckConf.loadCheckConf(context);
+        collectConf = DeviceCheckConf.loadCollectConf(context);
         groupConf = GroupConf.loadConf(context);
+
 
     }
 
@@ -103,6 +108,13 @@ public class CheckManager {
 
 
 
+    }
+
+    public CheckResult collect(Activity context,Handler handler, WebViewJs webViewJs) throws Exception{
+        if(gateway==null){
+            throw new Exception("Please set device profile first.");
+        }
+        return check(context, handler, webViewJs, collectConf.getCheckItems());
     }
 
     public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs) throws Exception{

@@ -32,7 +32,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class AllViewActivity extends BaseSwipeBackActivity implements OnDismissCallback {
+public class DeviceInfoActivity extends BaseSwipeBackActivity implements OnDismissCallback {
 
     ActionBar ab;
 
@@ -46,7 +46,7 @@ public class AllViewActivity extends BaseSwipeBackActivity implements OnDismissC
     @InjectView(R.id.header)
     RelativeLayout header;
 //    List<AppProcessInfo> mAppProcessInfos = new ArrayList<>();
-AllViewAdapter mClearMemoryAdapter;
+    AllViewAdapter infoListAdapter;
 //
 //    @InjectView(R.id.textCounter)
 //    CounterView textCounter;
@@ -74,8 +74,8 @@ AllViewAdapter mClearMemoryAdapter;
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //  applyKitKatTranslucency();
         List<CheckItem> checkItems = CheckManager.getLastCheckResult().getCheckItemList();
-        mClearMemoryAdapter = new AllViewAdapter(mContext, checkItems);
-        mListView.setAdapter(mClearMemoryAdapter);
+        infoListAdapter = new AllViewAdapter(mContext, checkItems);
+        mListView.setAdapter(infoListAdapter);
 
 //TODO 下面的按钮
 //        int footerHeight = mContext.getResources().getDimensionPixelSize(R.dimen.footer_height);

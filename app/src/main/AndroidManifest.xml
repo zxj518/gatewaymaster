@@ -64,7 +64,7 @@
             android:theme="@style/MyTranslucentAppTheme" >
         </activity>
         <activity
-            android:name=".ui.AllViewActivity"
+            android:name=".ui.DeviceInfoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyTranslucentAppTheme" >

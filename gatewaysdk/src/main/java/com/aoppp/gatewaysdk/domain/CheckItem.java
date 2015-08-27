@@ -20,6 +20,10 @@ public class CheckItem implements Cloneable{
 
     String desc;
 
+
+
+    String rule;
+
     //检查项包含的指标
     List<Indicator> indicators ;
 
@@ -77,6 +81,16 @@ public class CheckItem implements Cloneable{
         }
         checkItem.setIndicators(indicatorList);
         return checkItem;
+    }
+
+
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 
     @Override
