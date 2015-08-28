@@ -20,12 +20,12 @@ public class CheckItem implements Cloneable{
 
     String desc;
 
-
-
-    String rule;
+    List<CheckRule> rules;
 
     //检查项包含的指标
     List<Indicator> indicators ;
+
+
 
     public String getName() {
         return name;
@@ -68,29 +68,129 @@ public class CheckItem implements Cloneable{
         return cp;
     }
 
-    public CheckItem check(Gateway gateway, Context context,WebViewJs webView){
+    public CheckItem collect(Gateway gateway, Context context,WebViewJs webView){
         CheckItem checkItem = this.clone();
         List<Indicator> indicatorList = Lists.newArrayList();
         for(Indicator indicator : indicators){
             Indicator result = gateway.checkIndicator((Activity)context,webView, indicator, 30L, TimeUnit.SECONDS);
             indicatorList.add(result);
-            result.check();
-            if(result.getState() != 1) {
-                checkItem.setState(result.getState());
-            }
+//            result.check();
+//            if(result.getState() != 1) {
+//                checkItem.setState(result.getState());
+//            }
         }
         checkItem.setIndicators(indicatorList);
         return checkItem;
     }
 
-
-
-    public String getRule() {
-        return rule;
+    public void check(){
+        doCheck();
     }
 
-    public void setRule(String rule) {
-        this.rule = rule;
+    public Indicator getIndicatorByName(String indiName){
+        if(indicators==null){
+            return null;
+
+        }
+        for(Indicator indi :indicators){
+            if(indi.getName().equals(indiName)){
+                return indi;
+            }
+        }
+        return null;
+    }
+
+    private void doCheck(){
+        if(this.rules==null || this.rules.size()==0){
+            return;
+        }
+
+        for (CheckRule rule:rules){
+            Indicator indi = getIndicatorByName(rule.getIndicator());
+            if(indi==null){
+                rule.setResult(0);//无法判定
+                return;
+            }
+
+
+
+            if(rule.getOpeartor().equals("=")){
+                boolean ruleResult = equalsWith(indi.getDataType(), indi.getValue(), rule.getValue());
+                rule.setResult(ruleResult?1:-1);
+
+            }
+
+            if (rule.getOpeartor().equals("in")) {
+                boolean ruleResult = inWith(indi.getValue(), rule.getValue());
+                rule.setResult(ruleResult?1:-1);
+            }
+
+            if(indi.getDataType()==CheckUtils.NUMBERIC) {
+
+                if(indi.getValue()==null){
+                    rule.setResult(0);//无法判定
+                    return;
+                }
+                double indiDoubleValue = Double.parseDouble(indi.getValue().toString());
+                double ruleDoubleValue =  Double.parseDouble(rule.getValue().toString());
+                if (rule.getOpeartor().equals(">=")) {
+                    rule.setResult(indiDoubleValue >= ruleDoubleValue?1:-1);
+                } else if (rule.getOpeartor().equals("<=")) {
+                    rule.setResult(indiDoubleValue <= ruleDoubleValue?1:-1);
+                } else if (rule.getOpeartor().equals(">")) {
+                    rule.setResult(indiDoubleValue > ruleDoubleValue?1:-1);
+                } else if (rule.getOpeartor().equals("<")) {
+                    rule.setResult(indiDoubleValue < ruleDoubleValue?1:-1);
+                }
+            }
+
+
+
+        }
+    }
+
+    private boolean equalsWith(int dataType, Object indiValue, Object ruleValue){
+
+        if(ruleValue==null && indiValue==null){
+            return true;
+        }
+
+        if(dataType==CheckUtils.STRING){
+            return ruleValue.equals(indiValue);
+        }else if(dataType==CheckUtils.NUMBERIC){
+
+            double indiDoubleValue = ((Double)indiValue).doubleValue();
+            double ruleDoubleValue = ((Double)ruleValue).doubleValue();
+            return indiDoubleValue==ruleDoubleValue;
+        }
+        throw new RuntimeException("dataType does not suppport:" + dataType);
+    }
+
+    private boolean inWith(Object indiValue, Object ruleValue){
+        if(indiValue==null || ruleValue==null){
+            return false;
+        }
+        String ruleStr = ruleValue.toString();
+        String[] ruleValues = ruleStr.split("|");
+        if(ruleValues==null){
+            return false;
+        }
+        String indiValueStr = String.valueOf(indiValue);
+        for(String rv:ruleValues){
+            if(indiValueStr.equals(rv)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public List<CheckRule> getRules() {
+        return rules;
+    }
+
+    public void setRules(List<CheckRule> rules) {
+        this.rules = rules;
     }
 
     @Override

@@ -114,24 +114,24 @@ public class CheckManager {
         if(gateway==null){
             throw new Exception("Please set device profile first.");
         }
-        return check(context, handler, webViewJs, collectConf.getCheckItems());
+        return check(context, handler, webViewJs, collectConf.getCheckItems(), false);
     }
 
     public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs) throws Exception{
         if(gateway==null){
             throw new Exception("Please set device profile first.");
         }
-        return check(context, handler, webViewJs, checkConf.getCheckItems());
+        return check(context, handler, webViewJs, checkConf.getCheckItems(), true);
     }
 
     public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs,String groupName) throws Exception{
         if(gateway==null){
             throw new Exception("Please set device profile first.");
         }
-        return check(context, handler, webViewJs, this.getCheckItemsByGroup(groupName));
+        return check(context, handler, webViewJs, this.getCheckItemsByGroup(groupName), true);
     }
 
-    public CheckResult check(Activity context,Handler handler,WebViewJs webViewJs , CheckItem[] checkItems){
+    public CheckResult check(Activity context,Handler handler,WebViewJs webViewJs , CheckItem[] checkItems, boolean needCheck){
 
         List<CheckItem> result = Lists.newArrayList();
         long cost = System.currentTimeMillis();
@@ -150,7 +150,10 @@ public class CheckManager {
                 sendMessageToView(handler,MessageConst.CHECKING_OUTPUT, "正在检测:" + checkItem.getDesc(),processPercent);
                 CheckItem item = null;
                 try {
-                    item = checkItem.check(gateway, context, webViewJs);
+                    item = checkItem.collect(gateway, context, webViewJs);
+                    if(needCheck) {
+                        item.check();
+                    }
                     result.add(item);
                 }catch (Exception ex){
                     item = checkItem.clone();
