@@ -5,18 +5,22 @@ package com.aoppp.gatewaysdk.domain;
  */
 public class CheckRule implements Cloneable{
 
+    public static final  int PASSED = 1;
+    public static final  int FAIL = -1;
+    public static final  int NONE = 0;
+
     private String id;
     private String indicator;
-    private String opeartor;//=, >, <, >=, <=, in
+    private String operator;//=, >, <, >=, <=, in
     private String value;
     private String error;
 
     private int result;//1 passed -1, failed, 0, 无法判定
 
-    public CheckRule(String id, String indicator, String opeartor, String value, String error) {
+    public CheckRule(String id, String indicator, String operator, String value, String error) {
         this.id = id;
         this.indicator = indicator;
-        this.opeartor = opeartor;
+        this.operator = operator;
         this.value = value;
         this.error = error;
     }
@@ -37,12 +41,12 @@ public class CheckRule implements Cloneable{
         this.indicator = indicator;
     }
 
-    public String getOpeartor() {
-        return opeartor;
+    public String getOperator() {
+        return operator;
     }
 
-    public void setOpeartor(String opeartor) {
-        this.opeartor = opeartor;
+    public void setOperator(String operator) {
+        this.operator = operator;
     }
 
     public String getValue() {
@@ -70,6 +74,6 @@ public class CheckRule implements Cloneable{
     }
 
     public String toString(){
-        return "rule[" + indicator + opeartor + value + "]";
+        return "rule[" + indicator + operator + value + "]";
     }
 }

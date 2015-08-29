@@ -13,7 +13,7 @@ public class Indicator implements Cloneable{
     String message;
     //指标类型
     // 0 string , 1 int
-    int dataType;
+    int datatype;
 
     Object value;
 
@@ -64,12 +64,12 @@ public class Indicator implements Cloneable{
         this.message = message;
     }
 
-    public int getDataType() {
-        return dataType;
+    public int getDatatype() {
+        return datatype;
     }
 
-    public void setDataType(int dataType) {
-        this.dataType = dataType;
+    public void setDatatype(int datatype) {
+        this.datatype = datatype;
     }
 
     public Object getValue() {
@@ -99,7 +99,7 @@ public class Indicator implements Cloneable{
         cp.setName(this.name);
         cp.setDefaultValue(this.defaultValue);
         cp.setMessage(this.message);
-        cp.setDataType(this.dataType);
+        cp.setDatatype(this.datatype);
         cp.setValue(this.value);
         cp.setDesc(this.desc);
         return cp;
@@ -111,7 +111,7 @@ public class Indicator implements Cloneable{
                 "name='" + name + '\'' +
                 ", state=" + state +
                 ", message='" + message + '\'' +
-                ", dataType=" + dataType +
+                ", datatype=" + datatype +
                 ", value=" + value +
                 ", defaultValue='" + defaultValue + '\'' +
                 '}';

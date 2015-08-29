@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaysdk.domain.CheckItem;
+import com.aoppp.gatewaysdk.domain.CheckRule;
 import com.aoppp.gatewaysdk.domain.Indicator;
 
 import java.util.ArrayList;
@@ -67,21 +68,29 @@ public class CheckResultAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final CheckItem appInfo = (CheckItem) getItem(position);
+        final CheckItem checkItem = (CheckItem) getItem(position);
 //        holder.appIcon.setImageDrawable(appInfo.icon); //TODO 这里有个图标,group?
-        holder.appName.setText(appInfo.getDesc());
+        holder.appName.setText(checkItem.getDesc());
         StringBuilder sb = new StringBuilder();
-        if(appInfo.getIndicators()!=null && appInfo.getIndicators().size() > 0){
+        if(checkItem.getIndicators()!=null && checkItem.getIndicators().size() > 0){
 
-            for(Indicator indicator:appInfo.getIndicators()){
+            for(Indicator indicator:checkItem.getIndicators()){
 
-                sb.append(indicator.getDesc() + ":" + indicator.getValue() + "\n");
+                sb.append(indicator.getDesc() + ":" + indicator.getValue());
+                List<CheckRule> failedRules = checkItem.findFailedRulesByIndicator(indicator.getName());
+                if(failedRules!=null && failedRules.size() > 0) {
+                    sb.append("\t");
+                    for(CheckRule failedRule:failedRules) {
+                        sb.append(failedRule.getError() + ";");
+                    }
+                }
+                sb.append("\n");
             }
         }else{
             sb.append("NONE");
         }
         holder.memory.setText(sb.toString());
-        if (appInfo.getState() == 1) {
+        if (!checkItem.hasError()) {
             holder.cb.setChecked(true);
         } else {
             holder.cb.setChecked(false);

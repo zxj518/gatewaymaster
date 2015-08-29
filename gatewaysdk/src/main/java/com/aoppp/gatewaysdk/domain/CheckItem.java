@@ -6,6 +6,7 @@ import android.content.Context;
 import com.aoppp.webviewdom.internal.WebViewJs;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -65,6 +66,7 @@ public class CheckItem implements Cloneable{
         cp.setState(this.state);
         cp.setIndicators(this.indicators);
         cp.setDesc(this.desc);
+        cp.setRules(this.rules);
         return cp;
     }
 
@@ -109,37 +111,37 @@ public class CheckItem implements Cloneable{
             Indicator indi = getIndicatorByName(rule.getIndicator());
             if(indi==null){
                 rule.setResult(0);//无法判定
-                return;
+                continue;
             }
 
 
 
-            if(rule.getOpeartor().equals("=")){
-                boolean ruleResult = equalsWith(indi.getDataType(), indi.getValue(), rule.getValue());
+            if(rule.getOperator().equals("=")){
+                boolean ruleResult = equalsWith(indi.getDatatype(), indi.getValue(), rule.getValue());
                 rule.setResult(ruleResult?1:-1);
 
             }
 
-            if (rule.getOpeartor().equals("in")) {
+            if (rule.getOperator().equals("in")) {
                 boolean ruleResult = inWith(indi.getValue(), rule.getValue());
                 rule.setResult(ruleResult?1:-1);
             }
 
-            if(indi.getDataType()==CheckUtils.NUMBERIC) {
+            if(indi.getDatatype()==CheckUtils.NUMBERIC) {
 
                 if(indi.getValue()==null){
                     rule.setResult(0);//无法判定
-                    return;
+                    continue;
                 }
                 double indiDoubleValue = Double.parseDouble(indi.getValue().toString());
                 double ruleDoubleValue =  Double.parseDouble(rule.getValue().toString());
-                if (rule.getOpeartor().equals(">=")) {
+                if (rule.getOperator().equals(">=")) {
                     rule.setResult(indiDoubleValue >= ruleDoubleValue?1:-1);
-                } else if (rule.getOpeartor().equals("<=")) {
+                } else if (rule.getOperator().equals("<=")) {
                     rule.setResult(indiDoubleValue <= ruleDoubleValue?1:-1);
-                } else if (rule.getOpeartor().equals(">")) {
+                } else if (rule.getOperator().equals(">")) {
                     rule.setResult(indiDoubleValue > ruleDoubleValue?1:-1);
-                } else if (rule.getOpeartor().equals("<")) {
+                } else if (rule.getOperator().equals("<")) {
                     rule.setResult(indiDoubleValue < ruleDoubleValue?1:-1);
                 }
             }
@@ -163,7 +165,7 @@ public class CheckItem implements Cloneable{
             double ruleDoubleValue = ((Double)ruleValue).doubleValue();
             return indiDoubleValue==ruleDoubleValue;
         }
-        throw new RuntimeException("dataType does not suppport:" + dataType);
+        throw new RuntimeException("datatype does not suppport:" + dataType);
     }
 
     private boolean inWith(Object indiValue, Object ruleValue){
@@ -191,6 +193,32 @@ public class CheckItem implements Cloneable{
 
     public void setRules(List<CheckRule> rules) {
         this.rules = rules;
+    }
+
+    public boolean hasError(){
+        if(this.rules==null){
+            return false;
+        }
+        for (CheckRule rule:rules){
+            if(rule.getResult()==CheckRule.FAIL){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<CheckRule>  findFailedRulesByIndicator(String indiName){
+
+        if(this.rules==null){
+            return null;
+        }
+        List<CheckRule> failedRules = new ArrayList<CheckRule>();
+        for (CheckRule rule:rules){
+            if(rule.getIndicator().equals(indiName) && rule.getResult()==CheckRule.FAIL){
+                failedRules.add(rule);
+            }
+        }
+        return failedRules;
     }
 
     @Override
