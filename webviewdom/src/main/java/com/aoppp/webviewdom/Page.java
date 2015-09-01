@@ -91,6 +91,7 @@ public class Page {
                     public void onPageFinished(WebView view, String url) {
                         super.onPageFinished(view, url);
                         JsFunction jsFunction = new JsFunction(Page.this);
+                        Log.w("com.aoppp.jsFuncion", jsFunction.gen(false));
                         //加载获取脚本
                         webViewJs.loadUrl(jsFunction.gen(false));
                         //执行

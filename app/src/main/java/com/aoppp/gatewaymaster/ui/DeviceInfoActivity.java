@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.adapter.AllViewAdapter;
@@ -22,6 +23,8 @@ import com.aoppp.gatewaymaster.utils.SystemBarTintManager;
 import com.aoppp.gatewaymaster.utils.UIElementsHelper;
 import com.aoppp.gatewaysdk.domain.CheckItem;
 import com.aoppp.gatewaysdk.domain.CheckManager;
+import com.aoppp.gatewaysdk.domain.CheckResult;
+import com.aoppp.gatewaysdk.domain.DeviceBasicInfo;
 import com.john.waveview.WaveView;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
@@ -42,6 +45,11 @@ public class DeviceInfoActivity extends BaseSwipeBackActivity implements OnDismi
     @InjectView(R.id.wave_view)
     WaveView mwaveView;
 
+    @InjectView(R.id.textDeviceName)
+    TextView txtDeviceName;
+
+    @InjectView(R.id.textDeviceSN)
+    TextView txtDeviceSN;
 
     @InjectView(R.id.header)
     RelativeLayout header;
@@ -70,12 +78,19 @@ public class DeviceInfoActivity extends BaseSwipeBackActivity implements OnDismi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.title_activity_device_info);
         setContentView(R.layout.activity_full_check);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //  applyKitKatTranslucency();
-        List<CheckItem> checkItems = CheckManager.getLastCheckResult().getCheckItemList();
+
+        CheckResult checkResult = CheckManager.getLastCheckResult();
+        List<CheckItem> checkItems = checkResult.getCheckItemList();
         infoListAdapter = new AllViewAdapter(mContext, checkItems);
         mListView.setAdapter(infoListAdapter);
+
+        DeviceBasicInfo basicInfo = CheckManager.instance().getGateway().getBasicInfo();
+        txtDeviceName.setText(checkResult.getDeviceProfile().getProvider() + " " + basicInfo.getDeviceType());
+        txtDeviceSN.setText("SN:" + basicInfo.getDeviceSN());
 
 //TODO 下面的按钮
 //        int footerHeight = mContext.getResources().getDimensionPixelSize(R.dimen.footer_height);

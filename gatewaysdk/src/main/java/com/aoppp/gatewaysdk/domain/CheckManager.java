@@ -114,7 +114,7 @@ public class CheckManager {
         if(gateway==null){
             throw new Exception("Please set device profile first.");
         }
-        return check(context, handler, webViewJs, collectConf.getCheckItems(), false);
+        return check(context, handler, webViewJs, checkConf.getCheckItems(), false);
     }
 
     public CheckResult check(Activity context,Handler handler, WebViewJs webViewJs) throws Exception{

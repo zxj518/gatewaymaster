@@ -62,6 +62,8 @@ public class AllViewAdapter extends BaseAdapter {
                     .findViewById(R.id.name);
             holder.memory = (TextView) convertView
                     .findViewById(R.id.memory);
+
+            convertView.setTag(holder);//绑定ViewHolder对象
         } else {
             holder = (ViewHolder) convertView.getTag();
         }

@@ -73,6 +73,7 @@ public class FullCheckActivity extends BaseSwipeBackActivity implements OnDismis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle(R.string.title_activity_check_reuslt);
         setContentView(R.layout.activity_full_check);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //  applyKitKatTranslucency();
