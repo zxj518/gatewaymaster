@@ -18,10 +18,12 @@ public class JsFunction {
     public String gen(boolean debug) {
         StringBuilder js = new StringBuilder("javascript:function fetch(){\n");
         js.append("try{\n");
-        js.append("var result = new Object();");
+        js.append("var result = new Object();result.error='';");
         for (ElementMeta elementMeta : page.getAllElements()) {
-
-            js
+            if(elementMeta.getXpath().trim().isEmpty() && elementMeta.getJs().trim().isEmpty()){
+                continue;
+            }
+            js.append("try{\n")
                     .append("var ")
                     .append(elementMeta.getIndicator())
                     .append(" = ");
@@ -40,6 +42,9 @@ public class JsFunction {
                     .append(" = ")
                     .append(elementMeta.getIndicator())
                     .append(";\n");
+            js.append("}catch(e){\n");
+            js.append("result.error += e.toString() + ';'");
+            js.append("}\n");
         }
 
 

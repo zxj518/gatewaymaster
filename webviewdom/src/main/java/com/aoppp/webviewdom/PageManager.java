@@ -110,7 +110,9 @@ public class PageManager {
                 throw new RuntimeException("indicator " + indicatorId + " fetch fail");
             } else {
                 Map<String, String> result = toMap(json);
-                return new IndicatorResult(0, "", result);
+
+                String errorInfo = result.get("error");
+                return new IndicatorResult(0, errorInfo, result);
             }
 
         } catch (Throwable e) {

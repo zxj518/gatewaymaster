@@ -121,9 +121,11 @@ public class MainFragment extends BaseFragment {
                 }finally {
                     try {
                         CheckManager.instance().logout();
+                        setWebViewBlank();
                     } catch (Exception e) {
                         Log.e(this.getClass().getCanonicalName(), "logout error", e);
                     }
+
                 }
             }
         }).start();
@@ -155,7 +157,7 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.card1)
     void checkAll() {
-        onCheckStart("check_all",FullCheckActivity.class);
+        onCheckStart("check_all", FullCheckActivity.class);
         //startActivity(FullCheckActivity.class);
     }
 
@@ -231,6 +233,8 @@ public class MainFragment extends BaseFragment {
                     }
                 } finally {
                     CheckManager.instance().clear(getActivity());
+
+
                 }
 
 
@@ -248,7 +252,7 @@ public class MainFragment extends BaseFragment {
 
 
     public void checkCompleted(CheckResult result,Class<? extends Activity> activity) {
-
+        setWebViewBlank();
         if (result.getErrorCode() < 0) {
             AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle("Error").setMessage(result.getErrorMessage()).create();
             dialog.show();
@@ -312,6 +316,12 @@ public class MainFragment extends BaseFragment {
                 });
             }
         }).start();
+    }
+
+    public void setWebViewBlank(){
+        if(webView!=null){
+            webView.loadUrl("file:///android_asset/blank.htm");
+        }
     }
 
     public void sendOutputMessage(int code, String msgInfo, int process) {

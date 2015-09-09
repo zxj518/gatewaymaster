@@ -39,6 +39,6 @@ public class WebViewJs extends WebView{
             }
         }
         //这句必须加上
-        this.setWebChromeClient(new WebChromeClient());
+        //this.setWebChromeClient(new WebChromeClient());// 2015-9-7防止超时弹框，去掉了这句
     }
 }
