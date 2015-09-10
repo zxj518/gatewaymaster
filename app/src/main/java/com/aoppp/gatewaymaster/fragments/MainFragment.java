@@ -74,12 +74,16 @@ public class MainFragment extends BaseFragment {
             public void run() {
                 try {
                     CheckManager.instance().login();
-                    final IndicatorResult deviceTypeResult = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
+                    final IndicatorResult deviceTypeResult = PageManager.getInstance(getActivity()).fetchDeviceType(getActivity(),
                             webView, deviceProfile.getProvider(),
-                            deviceProfile.getIp(), "device_type",
-                            60, TimeUnit.SECONDS,true);
+                            deviceProfile.getIp(),
+                            60, TimeUnit.SECONDS);
+                    String deviceType = deviceTypeResult.getResult().get("device_type");
+                    if(deviceType==null || deviceType.equals("null")){
+                        throw new RuntimeException("can not fetch device type");
+                    }
                     final IndicatorResult deviceSNResult = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
-                            webView, deviceProfile.getProvider(),
+                            webView, deviceProfile.getProvider(),deviceType,
                             deviceProfile.getIp(), "device_sn",
                             60, TimeUnit.SECONDS,true);
 //                    final IndicatorResult hardware_version = PageManager.getInstance(getActivity()).fetchIndicator(getActivity(),
@@ -90,14 +94,15 @@ public class MainFragment extends BaseFragment {
 //                            webView, deviceProfile.getProvider(),
 //                            deviceProfile.getIp(), "software_version",
 //                            60, TimeUnit.SECONDS,true);
-                    String deviceType = deviceTypeResult.getResult().get("device_type");
+
                     String deviceSN = deviceSNResult.getResult().get("device_sn");
                     final DeviceBasicInfo basicInfo = new DeviceBasicInfo(deviceType, deviceSN);
                     CheckManager.instance().getGateway().setBasicInfo(basicInfo);
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
+                            setWebViewBlank();
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.append("设备型号:").append(deviceProfile.getProvider() + " " + basicInfo.getDeviceType());
                             stringBuilder.append("\n");
@@ -111,7 +116,7 @@ public class MainFragment extends BaseFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
+                            setWebViewBlank();
                             StringBuilder stringBuilder = new StringBuilder();
                             versionLabel.setText("");
                             progressDialog.cancel();
@@ -121,7 +126,7 @@ public class MainFragment extends BaseFragment {
                 }finally {
                     try {
                         CheckManager.instance().logout();
-                        setWebViewBlank();
+
                     } catch (Exception e) {
                         Log.e(this.getClass().getCanonicalName(), "logout error", e);
                     }

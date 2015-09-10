@@ -28,14 +28,55 @@ public class CookieHelper {
 
 
     public String getCnt(){
-        SimpleUrlMatcher simpleUrlMatcher = new SimpleUrlMatcher("http://"+ ip,"function GetRandCnt\\(\\) \\{ return '(.*)'; \\}");
-        return simpleUrlMatcher.match();
+        SimpleUrlMatcher simpleUrlMatcher = new SimpleUrlMatcher("http://"+ ip,"function GetRandCnt\\(\\) \\{ return (.*); \\}");
+        String matchStr = simpleUrlMatcher.match();
+
+        return matchStr;
     }
 
 
     public String getCookie(String userName,String password){
+
+            String matchStr = getCnt();
+            if(matchStr==null) {
+                return null;
+            }
+
+            String cnt = matchStr;
+            if(matchStr.startsWith("'") && matchStr.endsWith("'")){//如果是字符串，去掉首尾的单引号
+                if(matchStr.length() < 3){
+                        return "";
+                }
+                cnt = matchStr.substring(1,matchStr.length() - 1);
+                return buildCookie4Str(cnt, userName,password);
+            }else{
+                return buildCookie4Num(cnt, userName,password);
+            }
+
+
+
+
+    }
+
+    private String buildCookie4Num(String cnt, String userName, String password){
         try {
-            String cnt = getCnt();
+            //var cookie2 = "Cookie=" + "tid=" + MD5("" + cnt) + MD5(Username.value + cnt ) + MD5(MD5(Password.value) + cnt) + ":" + "Language:" + Language + ":" +"id=-1;path=/";
+            //Cookie:Cookie=tid=71a58e8cb75904f24cde464161c3e7661082944c32f4d4ba313bbf00e2fbc6657882109747222a5b7f0abd609dfc817e:Language:chinese:id=-1
+            StringBuilder builder = new StringBuilder("tid=");
+            builder.append(DigestUtils2.md5Hex(cnt))
+                    .append(DigestUtils2.md5Hex(userName + cnt))
+                    .append(DigestUtils2.md5Hex(DigestUtils2.md5Hex(password) + cnt))
+                    .append(":Language:chinese:id=-1");
+            return builder.toString();
+        }catch (Throwable e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String buildCookie4Str(String cnt, String userName, String password) {
+        try {
+
             StringBuilder builder = new StringBuilder("rid=");
             builder.append(DigestUtils2.sha256Hex(cnt))
                     .append(DigestUtils2.sha256Hex(userName + cnt))
@@ -45,8 +86,7 @@ public class CookieHelper {
         }catch (Throwable e){
             e.printStackTrace();
             return null;
-        }
-
+            }
 
     }
 

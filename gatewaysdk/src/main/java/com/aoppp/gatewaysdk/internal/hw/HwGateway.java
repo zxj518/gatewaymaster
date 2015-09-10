@@ -38,6 +38,7 @@ public class HwGateway extends Gateway {
 
             HttpGet request = new HttpGet("http://" + deviceProfile.getIp() + "/login.cgi");
             request.addHeader("Cookie", c);
+            request.addHeader("Upgrade-Insecure-Requests","1");
             DefaultHttpClient client = new DefaultHttpClient();
 
             HttpResponse res = client.execute(request);
@@ -49,7 +50,9 @@ public class HwGateway extends Gateway {
             for (int i = 0; i < cookies.size(); i++) {
                 sessionCookie = cookies.get(i);
             }
-
+            if(sessionCookie==null){
+                throw new RuntimeException("Login Failed, can not get sid cookie string");
+            }
 
             CookieManager cookieManager = CookieManager.getInstance();
             if (sessionCookie != null) {
@@ -60,6 +63,7 @@ public class HwGateway extends Gateway {
                                 + sessionCookie.getValue()
                                 + "; domain=" + sessionCookie.getDomain();
                 cookieManager.setCookie(sessionCookie.getDomain(), cookieString);
+                return true;
 //                        cookieManager.flush();
             }
         } catch (Exception e) {

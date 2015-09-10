@@ -74,7 +74,7 @@ public class CheckItem implements Cloneable{
         CheckItem checkItem = this.clone();
         List<Indicator> indicatorList = Lists.newArrayList();
         for(Indicator indicator : indicators){
-            Indicator result = gateway.checkIndicator((Activity)context,webView, indicator, 30L, TimeUnit.SECONDS);
+            Indicator result = gateway.checkIndicator((Activity)context,webView, gateway.getBasicInfo().deviceType, indicator, 30L, TimeUnit.SECONDS);
             indicatorList.add(result);
 //            result.check();
 //            if(result.getState() != 1) {

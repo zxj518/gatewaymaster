@@ -39,6 +39,7 @@ public abstract class Gateway {
 
     public Indicator checkIndicator(Activity activity,
                                     WebViewJs webViewJs,
+                                    String deviceType,
                                     Indicator indicator,
                                     long timeout,
                                     TimeUnit timeUnit) {
@@ -46,6 +47,7 @@ public abstract class Gateway {
         IndicatorResult result = PageManager.getInstance(activity).fetchIndicator(
                 activity,webViewJs,
                 deviceProfile.getProvider(),
+                deviceType,
                 deviceProfile.getIp(),
                 indicator.getName(),
                 timeout,timeUnit,

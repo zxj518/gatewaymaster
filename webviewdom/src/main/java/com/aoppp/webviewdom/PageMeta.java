@@ -21,6 +21,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class PageMeta {
 
 
+
+    private String deviceType;
+
     private String url;
 
     public String getUrl() {
@@ -39,5 +42,13 @@ public class PageMeta {
 
     public void setAllElements(List<ElementMeta> allElements) {
         this.allElements = allElements;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
     }
 }

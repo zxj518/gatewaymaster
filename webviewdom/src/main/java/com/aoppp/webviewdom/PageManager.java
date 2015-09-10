@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -30,28 +31,39 @@ public class PageManager {
 
     private Map<String, String> cache = new Hashtable<>();
 
-    private String[] supportDeviceType = new String[]{"HUAWEI","ZTE","BELL","FIBER"};
+    private String[] supportProviders = new String[]{"HUAWEI","ZTE","BELL","FIBER"};
 
     private PageManager(Activity activity) {
         Gson gson = new Gson();
         Type mapType = new TypeToken<ArrayList<PageMeta>>() {
         }.getType();
         try {
-            for (String deviceType : supportDeviceType) {
-                InputStream inputStream = activity.getAssets().open(deviceType + ".conf");
+            for (String provider : supportProviders) {
+                InputStream inputStream = activity.getAssets().open(provider + ".conf");
                 ArrayList<PageMeta> config = gson.fromJson(new BufferedReader(
                         new InputStreamReader(inputStream)), mapType);
 
-                Map<String, Page> pageMap = new HashMap<>();
+                //Map<String, Page> pageMap = new HashMap<>();
                 for (PageMeta pageMeta : config) {
                     Page page = new Page();
                     page.setUrl(pageMeta.getUrl());
                     page.setAllElements(pageMeta.getAllElements());
+
+
+                    String deviceTypeKey =
+                            pageMeta.getDeviceType()==null?provider:(provider + "|" + pageMeta.getDeviceType());
+
+                    Map<String, Page> pageMap = pageMetaByIndicator.get(deviceTypeKey);
+                    if(pageMap==null){
+                        pageMap = new HashMap<>();
+                        pageMetaByIndicator.put(deviceTypeKey, pageMap);
+                    }
+
                     for (ElementMeta elementMeta : pageMeta.getAllElements()) {
                         pageMap.put(elementMeta.getIndicator(), page);
                     }
                 }
-                pageMetaByIndicator.put(deviceType, pageMap);
+
 
             }
         } catch (Throwable e) {
@@ -67,8 +79,45 @@ public class PageManager {
         return pageManager;
     }
 
+    public IndicatorResult fetchDeviceType(Activity activity,
+                                          WebViewJs webViewJs,
+                                          String provider,
+                                          String ip,
+
+                                          long timeout,
+                                          TimeUnit timeUnit) {
+        String indicatorId = "device_type";
+        List<Page> pages = getAllPageMetaByIndicator(activity, webViewJs, provider, indicatorId);
+
+        for(Page page:pages) {
+            page.setIp(ip);
+            try {
+                String json = page.syncFetch(timeout, timeUnit);
+                if (json == null) {
+                    throw new RuntimeException("indicator " + indicatorId + " fetch fail");
+                } else {
+                    Map<String, String> result = toMap(json);
+
+                    String errorInfo = result.get("error");
+                    String deviceType =result.get(indicatorId);
+                    if(deviceType==null || deviceType.equals("null")){
+                        throw new RuntimeException("indicator " + indicatorId + " fetch fail");
+                    }
+                    return new IndicatorResult(0, errorInfo, result);
+                }
+
+            } catch (Throwable e) {
+                Log.e(this.getClass().getCanonicalName(), "indicator " + indicatorId + " fetch fail", e);
+
+            }
+
+        }
+        throw new RuntimeException("indicator " + indicatorId + " fetch fail");
+    }
+
     public IndicatorResult fetchIndicator(Activity activity,
                                           WebViewJs webViewJs,
+                                          String provider,
                                           String deviceType,
                                           String ip,
                                           String indicatorId,
@@ -78,7 +127,7 @@ public class PageManager {
         if (useCache) {
             String value = cache.get(indicatorId);
             if (value == null) {
-                IndicatorResult result = fetchIndicator(activity, webViewJs, deviceType, ip, indicatorId, timeout, timeUnit);
+                IndicatorResult result = fetchIndicator(activity, webViewJs, provider, deviceType, ip, indicatorId, timeout, timeUnit);
                 //add to cache
                 cache.putAll(result.getResult());
                 return result;
@@ -88,7 +137,7 @@ public class PageManager {
                 return new IndicatorResult(0, "", result);
             }
         } else {
-            IndicatorResult result = fetchIndicator(activity, webViewJs, deviceType, ip, indicatorId, timeout, timeUnit);
+            IndicatorResult result = fetchIndicator(activity, webViewJs, provider, deviceType, ip, indicatorId, timeout, timeUnit);
             return result;
         }
 
@@ -97,12 +146,13 @@ public class PageManager {
 
     public IndicatorResult fetchIndicator(Activity activity,
                                           WebViewJs webViewJs,
+                                          String provider,
                                           String deviceType,
                                           String ip,
                                           String indicatorId,
                                           long timeout,
                                           TimeUnit timeUnit) {
-        Page page = getPageMeta(activity, webViewJs, deviceType, indicatorId);
+        Page page = getPageMeta(activity, webViewJs, provider, deviceType, indicatorId);
         page.setIp(ip);
         try {
             String json = page.syncFetch(timeout, timeUnit);
@@ -132,8 +182,38 @@ public class PageManager {
     public void clearCache(){
         cache.clear();
     }
-    private Page getPageMeta(Activity activity, WebViewJs webViewJs, String deviceType, String indicatorId) {
-        Page page = pageMetaByIndicator.get(deviceType).get(indicatorId);
+
+    private List<Page> getAllPageMetaByIndicator(Activity activity, WebViewJs webViewJs, String provider,  String indicatorId){
+
+        List<Page> pages = new ArrayList<Page>();
+        for(String key:pageMetaByIndicator.keySet()) {
+            if(key.startsWith(provider)) {
+                Page page = pageMetaByIndicator.get(key).get(indicatorId);
+                if (page != null) {
+                    page.setActivity(activity);
+                    page.setWebViewJs(webViewJs);
+                    pages.add(page);
+                }
+            }
+        }
+        return pages;
+    }
+
+    private Page getPageMeta(Activity activity, WebViewJs webViewJs, String provider, String deviceType, String indicatorId) {
+        if(deviceType!=null) {
+            String deviceTypeKey =  provider + "|" + deviceType;
+            Map<String, Page> pageMap = pageMetaByIndicator.get(deviceTypeKey);
+            if (pageMap != null) {
+                Page page = pageMap.get(indicatorId);
+                if(page!=null){
+                    page.setActivity(activity);
+                    page.setWebViewJs(webViewJs);
+                    return page;
+                }
+            }
+        }
+
+        Page page = pageMetaByIndicator.get(provider).get(indicatorId);
         if (page != null) {
             page.setActivity(activity);
             page.setWebViewJs(webViewJs);
