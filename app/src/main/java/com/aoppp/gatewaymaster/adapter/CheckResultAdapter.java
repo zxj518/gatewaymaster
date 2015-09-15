@@ -1,6 +1,7 @@
 package com.aoppp.gatewaymaster.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,12 +59,12 @@ public class CheckResultAdapter extends BaseAdapter {
             holder.appIcon = (ImageView) convertView
                     .findViewById(R.id.image);
             holder.appName = (TextView) convertView
-                    .findViewById(R.id.name);
+                    .findViewById(R.id.text_name);
             holder.memory = (TextView) convertView
-                    .findViewById(R.id.memory);
+                    .findViewById(R.id.text_detail);
 
             holder.cb = (RadioButton) convertView
-                    .findViewById(R.id.choice_radio);
+                    .findViewById(R.id.cb_check);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -76,7 +77,7 @@ public class CheckResultAdapter extends BaseAdapter {
 
             for(Indicator indicator:checkItem.getIndicators()){
 
-                sb.append(indicator.getDesc() + ":" + indicator.getValue());
+                sb.append(indicator.getDesc() + ":" + (indicator.getValue()==null?"<未知>":indicator.getValue()));
                 List<CheckRule> failedRules = checkItem.findFailedRulesByIndicator(indicator.getName());
                 if(failedRules!=null && failedRules.size() > 0) {
                     sb.append("\t");
@@ -90,10 +91,13 @@ public class CheckResultAdapter extends BaseAdapter {
             sb.append("NONE");
         }
         holder.memory.setText(sb.toString());
+
         if (!checkItem.hasError()) {
             holder.cb.setChecked(true);
         } else {
             holder.cb.setChecked(false);
+            holder.memory.setTextColor(mContext.getResources().getColor(R.color.red_500));
+            //holder.cb.setTextColor();
         }
 
         return convertView;

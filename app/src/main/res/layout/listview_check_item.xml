@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
 
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
@@ -31,28 +31,35 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:scaleType="centerCrop"
         android:layout_centerVertical="true" />
-
-    <TextView
-        android:id="@+id/memory"
-        android:layout_width="200dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="8dip"
-        android:ellipsize="marquee"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:layout_toLeftOf="@+id/choice_radio"
-        android:scaleType="centerCrop" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_detail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="8dip"
+            android:ellipsize="marquee"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_toLeftOf="@+id/cb_check"
+            android:scaleType="centerCrop" />
 
-    <RadioButton
-        android:id="@+id/choice_radio"
-        android:layout_width="30.0dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:button="@drawable/memory_selector"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="  " />
-</RelativeLayout>
+        <RadioButton
+            android:id="@+id/cb_check"
+            android:layout_width="30.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:button="@drawable/memory_selector"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="  " />
+    </RelativeLayout>
+
+</LinearLayout>
 

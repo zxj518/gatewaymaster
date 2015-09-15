@@ -75,7 +75,7 @@ public class AllViewAdapter extends BaseAdapter {
 
             for(Indicator indicator:appInfo.getIndicators()){
 
-                sb.append(indicator.getDesc() + ":" + indicator.getValue() + "\n");
+                sb.append(indicator.getDesc() + ":" + (indicator.getValue()==null?"<未知>":indicator.getValue()) + "\n");
             }
         }else{
             sb.append("NONE");

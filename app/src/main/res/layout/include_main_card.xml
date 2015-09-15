@@ -92,7 +92,7 @@
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                card:card_name="@string/app_buz_check"
+                card:card_name="@string/app_buz_settings"
                 card:card_image="@drawable/card_icon_media" />
 
 
