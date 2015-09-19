@@ -23,6 +23,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_logout">注销</string>
+    <string name="action_setSN">设置SN</string>
 
     <string name="category_other">其他</string>
     <string name="category_def">常规设置</string>
@@ -38,8 +39,12 @@
     <string name="title_activity_provider">设备厂商</string>
     <string name="title_activity_device_info">设备状态</string>
     <string name="title_activity_check_reuslt">设备检测结果</string>
+    <string name="title_activity_set_sn">设置设备SN</string>
 
     <string name="pick_privoder">选择厂商</string>
+
+    <string name="activity_setsn_btn_submit">设置</string>
+    <string name="activity_setsn_txt_sn">设备SN</string>
 
     <string name="msg_load_device_info_failed">加载设备信息出错</string>
 </resources>
