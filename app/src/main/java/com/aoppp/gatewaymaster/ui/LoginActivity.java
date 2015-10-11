@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.aoppp.gatewaymaster.R;
 import com.aoppp.gatewaymaster.base.BaseActivity;
@@ -34,6 +35,8 @@ public class LoginActivity extends BaseActivity {
 
     private EditText txtUser;
 
+    private TextView txtSetSNEntry;
+
     ProgressDialog progressDialog;
 
     private String[] providerArray;
@@ -51,7 +54,13 @@ public class LoginActivity extends BaseActivity {
         txtIP = (EditText)this.findViewById(R.id.login_device_ip);
         txtPwd = (EditText)this.findViewById(R.id.login_password);
         txtUser = (EditText)this.findViewById(R.id.login_username);
+        txtSetSNEntry = (TextView)this.findViewById(R.id.text_setsn_entry);
 
+        txtSetSNEntry.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                onSetSN();
+            }
+        });
         loginButton = (Button)this.findViewById(R.id.login_commit_btn);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +232,7 @@ public class LoginActivity extends BaseActivity {
     private void onSetSN(){
         Intent intent = new Intent();
 
-        intent.setClass(this, SetSNActivity.class);
+        intent.setClass(this, SetSNWebViewActivity.class);
         startActivityForResult(intent, 2);
     }
 }

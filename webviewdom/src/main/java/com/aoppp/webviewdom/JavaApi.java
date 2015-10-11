@@ -1,5 +1,6 @@
 package com.aoppp.webviewdom;
 
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 
 /**
@@ -20,8 +21,10 @@ public class JavaApi {
     }
 
     @JavascriptInterface
-    public void onFinishJson(String result){
+    public void onFinishJson(String result, String data){
         callback.callback(result);
+        //for debug
+        //Log.w(JavaApi.class.getName(), "web content:\n" + data);
     }
 
     @JavascriptInterface

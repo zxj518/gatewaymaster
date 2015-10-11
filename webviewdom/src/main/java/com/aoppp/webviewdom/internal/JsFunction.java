@@ -53,7 +53,7 @@ public class JsFunction {
         if(debug) {
             js.append("window.alert(toJson);\n");
         }
-        js.append("window.javaapi.onFinishJson(toJson);\n");
+        js.append("window.javaapi.onFinishJson(toJson, document.body.innerHTML);\n");
         js.append("}catch(e){\n");//try block end
         js.append("window.javaapi.onFailJson(e.toString());\n");
         js.append("}\n");

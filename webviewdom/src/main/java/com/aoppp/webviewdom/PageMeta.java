@@ -20,11 +20,13 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class PageMeta {
 
-
-
     private String deviceType;
 
     private String url;
+
+    private String reqType = "get";
+
+    private String postData;
 
     public String getUrl() {
         return url;
@@ -51,4 +53,21 @@ public class PageMeta {
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
     }
+
+    public String getReqType() {
+        return reqType;
+    }
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
+    }
+
+    public String getPostData() {
+        return postData;
+    }
+
+    public void setPostData(String postData) {
+        this.postData = postData;
+    }
+
 }

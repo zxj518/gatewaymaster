@@ -2,6 +2,8 @@ package com.aoppp.webviewdom;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -9,6 +11,8 @@ import android.webkit.WebViewClient;
 import com.aoppp.webviewdom.internal.JsFunction;
 import com.aoppp.webviewdom.internal.JsFunctionException;
 import com.aoppp.webviewdom.internal.WebViewJs;
+
+import org.apache.http.util.EncodingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,10 @@ public class Page {
     private String url;
 
     private String ip;
+
+
+    private PageMeta pageMeta;
+
 
     private List<ElementMeta> allElements = new ArrayList<>();
 
@@ -74,28 +82,55 @@ public class Page {
         this.ip = ip;
     }
 
+
+    public PageMeta getPageMeta() {
+        return pageMeta;
+    }
+
+    public void setPageMeta(PageMeta pageMeta) {
+        this.pageMeta = pageMeta;
+    }
+
+    class Handler {
+
+         public void show(String data) {
+            //这里的data就webview加载的内容，即使页面跳转页都可以获取到，这样就可以做自己的处理了
+             Log.w(Page.class.getName(), "web content:\n" + data );
+            new AlertDialog.Builder(webViewJs.getContext()).setMessage(data).create().show();
+         }
+    }
+
     @SuppressLint("AddJavascriptInterface")
     public void asyncFetch(final Callback callback){
         final String appendUrl = "http://"+ip+url; //ip 和 path 结合
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webViewJs.loadUrl(appendUrl);
+                if(pageMeta.getReqType().equals("post")){
+                    webViewJs.postUrl(appendUrl, EncodingUtils.getBytes(pageMeta.getPostData(), "BASE64"));
+                }else {
+                    webViewJs.loadUrl(appendUrl);
+                }
                 injectCookie();
-                webViewJs.addJavascriptInterface(new JavaApi(callback),"javaapi");
+                webViewJs.addJavascriptInterface(new JavaApi(callback), "javaapi");
+                //webViewJs.addJavascriptInterface(new Handler(),"handler");
                 webViewJs.setWebViewClient(new WebViewClient(){
                     //界面加载后采集数据,都采集好了继续下一个页面
 
 
                     @Override
                     public void onPageFinished(WebView view, String url) {
+
                         super.onPageFinished(view, url);
+
                         JsFunction jsFunction = new JsFunction(Page.this);
-                        Log.w("com.aoppp.jsFuncion", jsFunction.gen(false));
+                        //输出function
+                        Log.d("com.aoppp.jsFuncion", jsFunction.gen(false));
                         //加载获取脚本
-                        webViewJs.loadUrl(jsFunction.gen(false));
+                        webViewJs.loadUrl(jsFunction.gen(false) + ";fetch()");
                         //执行
-                        webViewJs.loadUrl("javascript:fetch()");
+                        //webViewJs.loadUrl("javascript:fetch()");
+                        //Log.w("com.aoppp.jsFuncion", jsFunction.)
                     }
                 });
             }

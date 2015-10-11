@@ -19,6 +19,7 @@ public class WebViewJs extends WebView{
     public WebViewJs(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+
     }
 
     public WebViewJs(Context context) {

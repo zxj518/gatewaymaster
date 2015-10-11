@@ -45,6 +45,7 @@
 
     <string name="activity_setsn_btn_submit">设置</string>
     <string name="activity_setsn_txt_sn">设备SN</string>
+    <string name="activity_setsn_sn_entry"><u>安装设备SN</u></string>
 
     <string name="msg_load_device_info_failed">加载设备信息出错</string>
 </resources>

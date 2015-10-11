@@ -46,6 +46,7 @@ public class PageManager {
                 //Map<String, Page> pageMap = new HashMap<>();
                 for (PageMeta pageMeta : config) {
                     Page page = new Page();
+                    page.setPageMeta(pageMeta);
                     page.setUrl(pageMeta.getUrl());
                     page.setAllElements(pageMeta.getAllElements());
 
